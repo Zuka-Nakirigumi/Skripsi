@@ -1,0 +1,10 @@
+{
+    "splits\\aid\\seed_1993\\train.csv": "e3b577f1ff6d1ce8831bc1f8bd2a019e94c4a9a40e2c0de18ec7b6a1efa2c366",
+    "splits\\aid\\seed_1993\\test.csv": "e63539590dc727c0ed9e9e2bbf451305e7ce70d4f977034f77bd8577facf3c96",
+    "splits\\aid\\seed_1993\\T5_tasks.json": "5c678d4bba06886f1c01af18c133dfb103b981ace89c05b3fc570edfe32c6699",
+    "splits\\aid\\seed_1993\\T10_tasks.json": "9d93476bfe008ae13042751367e6bf78be012270001f83a2caec47b4142e6d4b",
+    "splits\\nwpu\\seed_1993\\train.csv": "502ecc53b22b24bbfbf9ceaac39b344be891d30bf1aae94bdb2aa0baf36b46d6",
+    "splits\\nwpu\\seed_1993\\test.csv": "ac28fcc99552a48a703c8feceda04389724c33cfbc300b9b2cad657a05f79de6",
+    "splits\\nwpu\\seed_1993\\T5_tasks.json": "0233cdd866b6d2ff8304b870aed4de9a4fc663f1a201e0084708c242b7dd8a72",
+    "splits\\nwpu\\seed_1993\\T10_tasks.json": "1eb173ed14a727d9db61cf45c66426ddc235b790260059ff9cf7b785933f861f"
+}

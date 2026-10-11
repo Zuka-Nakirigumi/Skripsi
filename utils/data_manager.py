@@ -1,24 +1,74 @@
 import logging
 import numpy as np
+import json
 from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 from utils.data import iCIFAR10, iCIFAR100, iImageNet100, iImageNet1000, iCIFAR10_AA, iCIFAR100_AA
+from thesis.data.datasets import (
+    iAID,
+    iNWPU_RESISC45,
+)
 from tqdm import tqdm
 import torch
 
 class DataManager(object):
-    def __init__(self, dataset_name, shuffle, seed, init_cls, increment, aug=1):
+    ## Modification add new parameters on the constructor
+    def __init__(self, dataset_name, shuffle, seed, init_cls, increment, aug=1,dataset_root=None, split_root=None, task_config_path=None):
         self.dataset_name = dataset_name
         self.aug = aug
+        ### Initiate the new parameters
+        self.dataset_root = dataset_root
+        self.split_root = split_root
+        self.task_config_path = task_config_path
+
+        self._task_config = None
+
+        if task_config_path is not None:
+            with open(
+                task_config_path,
+                "r",
+                encoding="utf-8",
+            ) as f:
+                self._task_config = json.load(f)
+
+        self._setup_data(
+            dataset_name,
+            shuffle,
+            seed,
+        )
         self._setup_data(dataset_name, shuffle, seed)
+
         assert init_cls <= len(self._class_order), "No enough classes."
-        self._increments = [init_cls]
-        while sum(self._increments) + increment < len(self._class_order):
-            self._increments.append(increment)
-        offset = len(self._class_order) - sum(self._increments)
-        if offset > 0:
-            self._increments.append(offset)
+
+        if self._task_config is not None:
+
+            self._increments = [
+                len(task["original_class_ids"])
+                for task in self._task_config["tasks"]
+            ]
+
+            assert sum(self._increments) == len(
+                self._class_order
+            )
+
+        else:
+
+            self._increments = [init_cls]
+
+            while (
+                sum(self._increments) + increment
+                < len(self._class_order)
+            ):
+                self._increments.append(increment)
+
+            offset = (
+                len(self._class_order)
+                - sum(self._increments)
+            )
+
+            if offset > 0:
+                self._increments.append(offset)
 
     @property
     def nb_tasks(self):
@@ -185,8 +235,9 @@ class DataManager(object):
             train_data, train_targets, trsf, self.use_path, self.aug
         ), DummyDataset(val_data, val_targets, trsf, self.use_path)
 
+    ### Modify the setup data parameters
     def _setup_data(self, dataset_name, shuffle, seed):
-        idata = _get_idata(dataset_name)
+        idata = _get_idata(dataset_name, dataset_root=self.dataset_root, split_root=self.split_root)
         idata.download_data()
 
         # Data
@@ -200,10 +251,21 @@ class DataManager(object):
         self._common_trsf = idata.common_trsf
 
         # Order
-        order = [i for i in range(len(np.unique(self._train_targets)))]
-        if shuffle:
-            np.random.seed(seed)
-            order = np.random.permutation(len(order)).tolist()
+        ### Modified the order code
+        num_classes = len(np.unique(self._train_targets))
+        if self._task_config is not None:
+            order = self._task_config[
+                "class_order"
+            ]
+            assert len(order) == num_classes
+            assert set(order) == set(
+                range(num_classes)
+            )
+        elif shuffle:
+            rng = np.random.RandomState(seed)
+            order = rng.permutation(
+                num_classes
+            ).tolist()
         else:
             order = idata.class_order
         self._class_order = order
@@ -276,8 +338,8 @@ class DummyDataset(Dataset):
 def _map_new_class_index(y, order):
     return np.array(list(map(lambda x: order.index(x), y)))
 
-
-def _get_idata(dataset_name):
+### Modified the parameters
+def _get_idata(dataset_name, dataset_root=None, split_root=None,):
     name = dataset_name.lower()
     if name == "cifar10":
         return iCIFAR10()
@@ -291,6 +353,25 @@ def _get_idata(dataset_name):
         return iCIFAR100_AA()
     elif name == "cifar10_aa":
         return iCIFAR10_AA()
+    elif name == "aid":
+        if dataset_root is None:
+            raise ValueError("dataset_root is required for AID.")
+        if split_root is None:
+            raise ValueError("split_root is required for AID.")
+        return iAID(dataset_root=dataset_root,split_root=split_root,)
+    elif name in {"nwpu","nwpu_resisc45","nwpu-resisc45",}:
+        if dataset_root is None:
+            raise ValueError("dataset_root is required for NWPU.")
+
+        if split_root is None:
+            raise ValueError(
+                "split_root is required for NWPU."
+            )
+
+        return iNWPU_RESISC45(
+            dataset_root=dataset_root,
+            split_root=split_root,
+        )
     else:
         raise NotImplementedError("Unknown dataset {}.".format(dataset_name))
 

@@ -104,8 +104,11 @@ class PASS(BaseLearner):
             for i, (_, inputs, targets) in enumerate(train_loader):
                 inputs, targets = inputs.to(
                     self._device, non_blocking=True), targets.to(self._device, non_blocking=True)
+                ### Making PASS input dynamic
+                batch_size, channels, height, width = inputs.shape
                 inputs = torch.stack([torch.rot90(inputs, k, (2, 3)) for k in range(4)], 1)
-                inputs = inputs.view(-1, 3, 32, 32)
+                inputs = inputs.view(-1,channels,height,width)
+                # inputs = inputs.view(-1, 3, 32, 32)
                 targets = torch.stack([targets * 4 + k for k in range(4)], 1).view(-1)
                 logits, loss_clf, loss_fkd, loss_proto = self._compute_pass_loss(inputs,targets)
                 loss = loss_clf + loss_fkd + loss_proto

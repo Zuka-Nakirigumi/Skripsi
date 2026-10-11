@@ -1,0 +1,169 @@
+{
+    "dataset": "AID",
+    "class_order_seed": 1993,
+    "num_classes": 30,
+    "init_cls": 14,
+    "increment": 4,
+    "num_tasks": 5,
+    "class_order": [
+        27,
+        21,
+        26,
+        2,
+        8,
+        13,
+        10,
+        6,
+        15,
+        20,
+        14,
+        23,
+        12,
+        28,
+        11,
+        5,
+        0,
+        22,
+        18,
+        4,
+        19,
+        24,
+        9,
+        7,
+        16,
+        3,
+        29,
+        17,
+        25,
+        1
+    ],
+    "class_order_names": [
+        "Stadium",
+        "RailwayStation",
+        "Square",
+        "BaseballField",
+        "DenseResidential",
+        "Meadow",
+        "Farmland",
+        "Church",
+        "Mountain",
+        "Port",
+        "MediumResidential",
+        "River",
+        "Industrial",
+        "StorageTanks",
+        "Forest",
+        "Center",
+        "Airport",
+        "Resort",
+        "Playground",
+        "Bridge",
+        "Pond",
+        "School",
+        "Desert",
+        "Commercial",
+        "Park",
+        "Beach",
+        "Viaduct",
+        "Parking",
+        "SparseResidential",
+        "BareLand"
+    ],
+    "tasks": [
+        {
+            "task_id": 0,
+            "original_class_ids": [
+                27,
+                21,
+                26,
+                2,
+                8,
+                13,
+                10,
+                6,
+                15,
+                20,
+                14,
+                23,
+                12,
+                28
+            ],
+            "class_names": [
+                "Stadium",
+                "RailwayStation",
+                "Square",
+                "BaseballField",
+                "DenseResidential",
+                "Meadow",
+                "Farmland",
+                "Church",
+                "Mountain",
+                "Port",
+                "MediumResidential",
+                "River",
+                "Industrial",
+                "StorageTanks"
+            ]
+        },
+        {
+            "task_id": 1,
+            "original_class_ids": [
+                11,
+                5,
+                0,
+                22
+            ],
+            "class_names": [
+                "Forest",
+                "Center",
+                "Airport",
+                "Resort"
+            ]
+        },
+        {
+            "task_id": 2,
+            "original_class_ids": [
+                18,
+                4,
+                19,
+                24
+            ],
+            "class_names": [
+                "Playground",
+                "Bridge",
+                "Pond",
+                "School"
+            ]
+        },
+        {
+            "task_id": 3,
+            "original_class_ids": [
+                9,
+                7,
+                16,
+                3
+            ],
+            "class_names": [
+                "Desert",
+                "Commercial",
+                "Park",
+                "Beach"
+            ]
+        },
+        {
+            "task_id": 4,
+            "original_class_ids": [
+                29,
+                17,
+                25,
+                1
+            ],
+            "class_names": [
+                "Viaduct",
+                "Parking",
+                "SparseResidential",
+                "BareLand"
+            ]
+        }
+    ]
+}

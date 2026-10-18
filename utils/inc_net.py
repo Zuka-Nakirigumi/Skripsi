@@ -29,6 +29,12 @@ def get_convnet(args, pretrained=False):
         return resnet18_remote(pretrained=pretrained,args=args)
     elif name == "remote_resnet34":
         return resnet34_remote(pretrained=pretrained,args=args)
+    elif name == "remote_ssre_resnet18":
+        from thesis.backbones.resnet_ssre import (remote_ssre_resnet18)
+        return remote_ssre_resnet18(args)
+    elif name == "remote_ssre_resnet34":
+        from thesis.backbones.resnet_ssre import (remote_ssre_resnet34)
+        return remote_ssre_resnet34(args)
     elif name == "resnet32":
         return resnet32()
     elif name == "resnet18":

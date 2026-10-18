@@ -69,17 +69,51 @@ class PASS(BaseLearner):
         return (rotated_inputs,rotated_targets)
     
     def after_task(self):
-        self._known_classes = self._total_classes
-        self._old_network = self._network.copy().freeze()
+        # ==========================================
+        # 1. Commit jumlah kelas yang sudah dipelajari
+        # ==========================================
+        self._known_classes = (self._total_classes)
+
+        # ==========================================
+        # 2. Buat frozen teacher untuk task berikutnya
+        # ==========================================
+        self._old_network = (self._network.copy().freeze())
+        # Pointer yang dipakai oleh
+        # feature knowledge distillation.
         if hasattr(self._old_network,"module"):
-            self.old_network_module_ptr = self._old_network.module
+            self.old_network_module_ptr = (self._old_network.module)
         else:
-            self.old_network_module_ptr = self._old_network
-        self.save_checkpoint("{}_{}_{}".format(self.args["model_name"],self.args["init_cls"],self.args["increment"]))
+            self.old_network_module_ptr = (self._old_network)
+
+        # ==========================================
+        # 3. Checkpoint bersifat opsional
+        # ==========================================
+        if self.args.get("save_checkpoints",True):
+            self.save_checkpoint("{}_{}_{}".format(self.args["model_name"],self.args["init_cls"],self.args["increment"]))
+
     def incremental_train(self, data_manager):
         self.data_manager = data_manager
-        self._cur_task += 1
+    
+        #Consistency guard
+        next_task = (self._cur_task + 1)
+        if next_task == 0:
+            expected_known_classes = 0
+        else:
+            expected_known_classes = (data_manager.get_accumulate_tasksize(next_task - 1))
+        if (self._known_classes != expected_known_classes):
+            raise RuntimeError(
+                "PASS task state is inconsistent. "
+                f"About to start task {next_task}, "
+                f"but _known_classes="
+                f"{self._known_classes}, "
+                f"expected "
+                f"{expected_known_classes}. "
+                "Did you forget to call "
+                "after_task() after the "
+                "previous task?"
+            )
 
+        self._cur_task = next_task
         self._total_classes = self._known_classes + \
             data_manager.get_task_size(self._cur_task)
         self._network.update_fc(self._total_classes*4)
@@ -94,13 +128,16 @@ class PASS(BaseLearner):
 
         train_dataset = data_manager.get_dataset(np.arange(self._known_classes, self._total_classes), source='train',
                                                  mode='train', appendent=self._get_memory())
-        self.train_loader = DataLoader(
-            train_dataset, batch_size=self.args["batch_size"], shuffle=True, num_workers=self.args["num_workers"], pin_memory=True)
+        self.train_loader = (build_train_loader(dataset=train_dataset,dataset_name=(self.args["dataset"]),
+                                                batch_size=(self.args["batch_size"]),
+                                                num_workers=(self.args["num_workers"]),
+                                                seed=(int(self.args["seed"])+ self._cur_task)))
+
         test_dataset = data_manager.get_dataset(
             np.arange(0, self._total_classes), source='test', mode='test')
-        self.test_loader = DataLoader(
-            test_dataset, batch_size=self.args["batch_size"], shuffle=False, num_workers=self.args["num_workers"])
-
+        self.test_loader = (build_eval_loader(dataset=test_dataset,
+                                            batch_size=(self.args["batch_size"]),
+                                            num_workers=(self.args["num_workers"])))
         if len(self._multiple_gpus) > 1:
             self._network = nn.DataParallel(self._network, self._multiple_gpus)
         self._train(self.train_loader, self.test_loader)
@@ -131,13 +168,30 @@ class PASS(BaseLearner):
             for class_idx in range(self._known_classes, self._total_classes):
                 data, targets, idx_dataset = self.data_manager.get_dataset(np.arange(class_idx, class_idx+1), source='train',
                                                                     mode='test', ret_data=True)
-                idx_loader = DataLoader(idx_dataset, batch_size=self.args["batch_size"], shuffle=False, num_workers=4)
+                ### Prototype extraction doesnt use weighted random sampler
+                idx_loader = (build_eval_loader(dataset=idx_dataset,
+                                                batch_size=(self.args["batch_size"]),
+                                                num_workers=(self.args["num_workers"])))
                 vectors, _ = self._extract_vectors(idx_loader)
                 class_mean = np.mean(vectors, axis=0)
                 self._protos.append(class_mean)
                 cov = np.cov(vectors.T)
                 self._radiuses.append(np.trace(cov)/vectors.shape[1]) 
             self._radius = np.sqrt(np.mean(self._radiuses))
+            if (len(self._protos) != self._total_classes):
+                raise RuntimeError(
+                    "Prototype count mismatch: "
+                    f"got {len(self._protos)}, "
+                    f"expected "
+                    f"{self._total_classes}."
+                )
+            if (len(self._radiuses) != self._total_classes):
+                raise RuntimeError(
+                    "Radius count mismatch: "
+                    f"got {len(self._radiuses)}, "
+                    f"expected "
+                    f"{self._total_classes}."
+                )
 
     def _train_function(self, train_loader, test_loader, optimizer, scheduler):
         prog_bar = tqdm(range(self._epoch_num))
@@ -151,11 +205,15 @@ class PASS(BaseLearner):
                     self._device, non_blocking=True), targets.to(self._device, non_blocking=True)
                 ### Making PASS input dynamic
                 batch_size, channels, height, width = inputs.shape
-                inputs = torch.stack([torch.rot90(inputs, k, (2, 3)) for k in range(4)], 1)
-                inputs = inputs.view(-1,channels,height,width)
-                # inputs = inputs.view(-1, 3, 32, 32)
-                targets = torch.stack([targets * 4 + k for k in range(4)], 1).view(-1)
+                inputs = inputs.to(self._device,non_blocking=True)
+                targets = targets.to(self._device,dtype=torch.long,non_blocking=True)
+                inputs, targets = (self._expand_rotations(inputs,targets))
+                # inputs = inputs.view(-1,channels,height,width)
                 logits, loss_clf, loss_fkd, loss_proto = self._compute_pass_loss(inputs,targets)
+                # Diagnostic loss
+                self._last_loss_clf = float(loss_clf.detach().cpu())
+                self._last_loss_fkd = float(loss_fkd.detach().cpu())
+                self._last_loss_proto = float(loss_proto.detach().cpu())
                 loss = loss_clf + loss_fkd + loss_proto
                 optimizer.zero_grad()
                 loss.backward()
@@ -180,33 +238,50 @@ class PASS(BaseLearner):
             prog_bar.set_description(info)
             logging.info(info)
 
-    def _compute_pass_loss(self,inputs, targets):
-        logits = self._network(inputs)["logits"]
-        loss_clf = F.cross_entropy(logits/self.args["temp"], targets)
-        
+    def _compute_pass_loss(self,inputs,targets):
+        outputs = self._network(
+            inputs
+        )
+
+        logits = outputs["logits"]
+        loss_clf = F.cross_entropy(
+            logits / self.args["temp"],
+            targets,
+        )
+
+        # =========================
+        # Initial task
+        # =========================
         if self._cur_task == 0:
-            return logits, loss_clf, torch.tensor(0.), torch.tensor(0.)
-        
-        features = self._network_module_ptr.extract_vector(inputs)
-        features_old = self.old_network_module_ptr.extract_vector(inputs)
-        loss_fkd = self.args["lambda_fkd"] * torch.dist(features, features_old, 2)
-        
-        # index = np.random.choice(range(self._known_classes),size=self.args["batch_size"],replace=True)
-        
-        index = np.random.choice(range(self._known_classes),size=self.args["batch_size"]*int(self._known_classes/(self._total_classes-self._known_classes)),replace=True)
-        # print(index)
-        # print(np.concatenate(self._protos))
-        proto_features = np.array(self._protos)[index]
-        # print(proto_features)
-        proto_targets = 4*index
-        proto_features = proto_features + np.random.normal(0,1,proto_features.shape)*self._radius
-        proto_features = torch.from_numpy(proto_features).float().to(self._device,non_blocking=True)
-        proto_targets = torch.from_numpy(proto_targets).to(self._device,non_blocking=True)
-        
-        
-        proto_logits = self._network_module_ptr.fc(proto_features)["logits"]
-        loss_proto = self.args["lambda_proto"] * F.cross_entropy(proto_logits/self.args["temp"], proto_targets)
-        return logits, loss_clf, loss_fkd, loss_proto
+            zero = loss_clf.new_zeros(())
+            return (logits,loss_clf,zero,zero)
+
+        # =========================
+        # Incremental tasks
+        # =========================
+
+        # Gunakan feature dari forward
+        # yang sudah dilakukan di atas.
+        features = outputs["features"]  
+
+        # Old network frozen:
+        # tidak membutuhkan graph gradient.
+        with torch.no_grad():
+            features_old = (self.old_network_module_ptr.extract_vector(inputs))
+
+        loss_fkd = (self.args["lambda_fkd"] * torch.dist(features,features_old,2))
+        num_new_classes = (self._total_classes - self._known_classes)
+        proto_batch_size = (self.args["batch_size"] * int(self._known_classes / num_new_classes))
+        index = np.random.choice(range(self._known_classes),size=proto_batch_size,replace=True)
+        proto_features = (np.asarray(self._protos)[index])
+        proto_targets = (4 * index)
+        proto_features = (proto_features + np.random.normal(0,1,proto_features.shape) * self._radius)
+        proto_features = (torch.from_numpy(proto_features).float().to(self._device,non_blocking=True))
+        proto_targets = (torch.from_numpy(proto_targets).long().to(self._device,non_blocking=True))
+        proto_logits = (self._network_module_ptr.fc(proto_features)["logits"])
+        loss_proto = (self.args["lambda_proto"] * F.cross_entropy(proto_logits / self.args["temp"],proto_targets))
+
+        return (logits,loss_clf,loss_fkd,loss_proto)
         
     
     

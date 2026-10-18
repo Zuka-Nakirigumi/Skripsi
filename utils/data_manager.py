@@ -311,7 +311,8 @@ class DummyDataset(Dataset):
         assert len(images) == len(labels), "Data size error!"
         self.aug = aug
         self.images = images
-        self.labels = labels
+        ### Parsing label to long dtype
+        self.labels = np.asarray(labels,dtype=np.int64)
         self.trsf = trsf
         self.use_path = use_path
 
@@ -324,7 +325,8 @@ class DummyDataset(Dataset):
                 image = self.trsf(pil_loader(self.images[idx]))
             else:
                 image = self.trsf(Image.fromarray(self.images[idx]))
-            label = self.labels[idx]
+            ### Parsing the label to int
+            label = int(self.labels[idx])
             return idx, image, label
         else:
             if self.use_path:

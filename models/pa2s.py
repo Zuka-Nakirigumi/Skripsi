@@ -10,6 +10,11 @@ from models.base import BaseLearner
 from utils.inc_net import CosineIncrementalNet, FOSTERNet, IncrementalNet
 from utils.toolkit import count_parameters, target2onehot, tensor2numpy
 
+from thesis.data.loaders import (
+    build_train_loader,
+    build_eval_loader,
+)
+
 EPSILON = 1e-8
 
 
@@ -22,7 +27,47 @@ class PASS(BaseLearner):
         self._radius = 0
         self._radiuses = []
 
+    ### Rotation helper
+    def _expand_rotations(self,inputs,targets):
+        """
+        Membentuk empat rotasi:
+        0°, 90°, 180°, 270°.
 
+        Input:
+            inputs  : [B, C, H, W]
+            targets : [B]
+
+        Output:
+            inputs  : [4B, C, H, W]
+            targets : [4B]
+        """
+
+        if inputs.ndim != 4:
+            raise ValueError(
+                "PASS expects input shape "
+                "[B, C, H, W]."
+            )
+
+        batch_size, channels, height, width = (inputs.shape)
+        targets = targets.long()
+
+        rotated_inputs = torch.stack(
+            [
+                torch.rot90(
+                    inputs,
+                    k,
+                    dims=(2, 3),
+                )
+                for k in range(4)
+            ],
+            dim=1,
+        )
+
+        rotated_inputs = (rotated_inputs.reshape(batch_size * 4,channels,height,width))
+        rotated_targets = torch.stack([targets * 4 + k for k in range(4)],dim=1,).reshape(-1)
+
+        return (rotated_inputs,rotated_targets)
+    
     def after_task(self):
         self._known_classes = self._total_classes
         self._old_network = self._network.copy().freeze()

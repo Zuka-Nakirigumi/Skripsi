@@ -16,11 +16,20 @@ from convs.memo_cifar_resnet import get_resnet32_a2fc as get_memo_resnet32 #for 
 from convs.ACL_buffer import RandomBuffer, activation_t
 from convs.linears import RecursiveLinear
 from typing import Dict, Any
+from thesis.backbones.resnet_attention import (
+    resnet18_remote,
+    resnet34_remote,
+)
 
 
 def get_convnet(args, pretrained=False):
     name = args["convnet_type"].lower()
-    if name == "resnet32":
+    ### remote resnet for thesis
+    if name == "remote_resnet18":
+        return resnet18_remote(pretrained=pretrained,args=args)
+    elif name == "remote_resnet34":
+        return resnet34_remote(pretrained=pretrained,args=args)
+    elif name == "resnet32":
         return resnet32()
     elif name == "resnet18":
         return resnet18(pretrained=pretrained,args=args)
@@ -127,16 +136,41 @@ class IncrementalNet(BaseNet):
             self._gradcam_hooks = [None, None]
             self.set_gradcam_hook()
 
-    def update_fc(self, nb_classes):
-        fc = self.generate_fc(self.feature_dim, nb_classes)
-        if self.fc is not None:
-            nb_output = self.fc.out_features
-            weight = copy.deepcopy(self.fc.weight.data)
-            bias = copy.deepcopy(self.fc.bias.data)
-            fc.weight.data[:nb_output] = weight
-            fc.bias.data[:nb_output] = bias
+    def update_fc(self,nb_classes):
+        nb_classes = int(nb_classes)
+        # Initial classifier
+        if self.fc is None:
+            self.fc = self.generate_fc(self.feature_dim,nb_classes)
+            return
 
-        del self.fc
+        nb_output = (self.fc.out_features)
+
+        # Dalam Class-Incremental Learning,
+        # classifier tidak boleh mengecil.
+        if nb_classes < nb_output:
+            raise ValueError(
+                "Invalid classifier shrink: "
+                f"{nb_output} -> {nb_classes}. "
+                "This usually means the same "
+                "learner was reused after a "
+                "failed/incomplete task."
+            )
+
+        # Tidak ada perubahan.
+        if nb_classes == nb_output:
+            return
+
+        # Normal class expansion.
+        fc = self.generate_fc(self.feature_dim,nb_classes)
+
+        # Pertahankan device classifier lama.
+        fc = fc.to(self.fc.weight.device)
+
+        with torch.no_grad():
+
+            fc.weight[:nb_output].copy_(self.fc.weight)
+            fc.bias[:nb_output].copy_(self.fc.bias)
+
         self.fc = fc
 
     def weight_align(self, increment):

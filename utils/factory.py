@@ -75,5 +75,8 @@ def get_model(model_name, args):
     elif name == "tagfex":
         from models.tagfex import TagFex
         return TagFex(args)
+    elif name == "fecam":
+        from models.fecam import FeCAM
+        return FeCAM(args)
     else:
         assert 0

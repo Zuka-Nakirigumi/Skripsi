@@ -11,12 +11,14 @@ from thesis.backbones.variants import (
     get_all_backbone_variants, 
 )
 
-from .resnet_ssre import (
+from thesis.backbones.resnet_ssre import (
     SSREResNet,
     SSREBasicBlock,
     SSREConvBlock,
     remote_ssre_resnet18,
     remote_ssre_resnet34,
+    get_ssre_backbone_variant,
+    get_all_ssre_backbone_variants
 )
 
 
@@ -28,4 +30,11 @@ __all__ = [
     "THESIS_BACKBONE_VARIANTS",
     "get_backbone_variant",
     "get_all_backbone_variants",
+    "SSREResNet",
+    "SSREBasicBlock",
+    "SSREConvBlock",
+    "remote_ssre_resnet18",
+    "remote_ssre_resnet34",
+    "get_ssre_backbone_variant",
+    "get_all_ssre_backbone_variants"
 ]

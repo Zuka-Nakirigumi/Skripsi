@@ -1,0 +1,29 @@
+{
+    "model_name": "fecam",
+
+    "memory_size": 0,
+    "fixed_memory": false,
+
+    "init_epochs": 200,
+    "init_lr": 0.1,
+    "init_weight_decay": 0.0005,
+
+    "beta": 0.5,
+
+    "alpha1": 1.0,
+    "alpha2": 1.0,
+
+    "ncm": false,
+
+    "tukey": true,
+
+    "diagonal": false,
+
+    "per_class": true,
+
+    "full_cov": true,
+
+    "shrink": true,
+
+    "norm_cov": true
+}

@@ -49,16 +49,15 @@ def _make_attention(
         )
 
     if attention_type == "cbam":
-
         return CBAM(
-            channels=channels,
-            reduction=int(
+            channels,
+            int(
                 args.get(
                     "cbam_reduction",
                     16,
                 )
             ),
-            spatial_kernel=int(
+            int(
                 args.get(
                     "cbam_spatial_kernel",
                     7,
@@ -67,22 +66,21 @@ def _make_attention(
         )
 
     if attention_type == "procbam":
-
         return ProCBAM(
-            channels=channels,
-            reduction=int(
+            channels,
+            int(
                 args.get(
                     "procbam_reduction",
                     16,
                 )
             ),
-            spatial_kernel=int(
+            int(
                 args.get(
                     "procbam_spatial_kernel",
                     7,
                 )
             ),
-            se_reduction=int(
+            int(
                 args.get(
                     "procbam_se_reduction",
                     16,

@@ -50,36 +50,21 @@ class FeCAM(BaseLearner):
         self._diag_mat = []
 
         self._common_cov = None
-        
+
     def after_task(self):
         self._known_classes = (self._total_classes)
 
     def incremental_train(self,data_manager):
-        self.data_manager = (
-            data_manager
-        )
-
-        next_task = (
-            self._cur_task + 1
-        )
+        self.data_manager = (data_manager)
+        next_task = (self._cur_task + 1)
 
         if next_task == 0:
-
             expected_known_classes = 0
 
         else:
+            expected_known_classes = (data_manager.get_accumulate_tasksize(next_task - 1))
 
-            expected_known_classes = (
-                data_manager
-                .get_accumulate_tasksize(
-                    next_task - 1
-                )
-            )
-
-        if (
-            self._known_classes
-            != expected_known_classes
-        ):
+        if (self._known_classes != expected_known_classes):
 
             raise RuntimeError(
                 "FeCAM task state is inconsistent. "
@@ -90,51 +75,19 @@ class FeCAM(BaseLearner):
                 f"{expected_known_classes}."
             )
 
-        self._cur_task = (
-            next_task
-        )
+        self._cur_task = (next_task)
 
-        self._total_classes = (
-            self._known_classes
-            + data_manager.get_task_size(
-                self._cur_task
-            )
-        )
-
-        self._network.update_fc(
-            self._total_classes,
-            self._cur_task,
-        )
-
-        self._network_module_ptr = (
-            self._network
-        )
-
+        self._total_classes = (self._known_classes + data_manager.get_task_size(self._cur_task))
+        self._network.update_fc(self._total_classes,self._cur_task)
+        self._network_module_ptr = (self._network)
 
         # Setelah Task 0 feature extractor
         # harus frozen.
         if self._cur_task > 0:
-
-            for parameter in (
-                self._network
-                .convnet
-                .parameters()
-            ):
-
+            for parameter in (self._network.convnet.parameters()):
                 parameter.requires_grad = False
 
-
-        train_dataset = (
-            data_manager.get_dataset(
-                np.arange(
-                    self._known_classes,
-                    self._total_classes,
-                ),
-                source="train",
-                mode="train",
-            )
-        )
-
+        train_dataset = (data_manager.get_dataset(np.arange(self._known_classes,self._total_classes),source="train",mode="train"))
 
         self.train_loader = (
             build_train_loader(
@@ -169,18 +122,7 @@ class FeCAM(BaseLearner):
             )
         )
 
-
-        test_dataset = (
-            data_manager.get_dataset(
-                np.arange(
-                    0,
-                    self._total_classes,
-                ),
-                source="test",
-                mode="test",
-            )
-        )
-
+        test_dataset = (data_manager.get_dataset(np.arange(0,self._total_classes),source="test",mode="test"))
 
         self.test_loader = (
             build_eval_loader(
@@ -201,39 +143,22 @@ class FeCAM(BaseLearner):
         )
 
 
-        self._train(
-            self.train_loader,
-            self.test_loader,
-        )
+        self._train(self.train_loader,self.test_loader)
 
     def _train(self,train_loader,test_loader):
-        self._network.to(
-            self._device
-        )
+        self._network.to(self._device)
 
-        if hasattr(
-            self._network,
-            "module",
-        ):
-            self._network_module_ptr = (
-                self._network.module
-            )
+        if hasattr(self._network,"module"):
+            self._network_module_ptr = (self._network.module)
         else:
-            self._network_module_ptr = (
-                self._network
-            )
+            self._network_module_ptr = (self._network)
 
         # =====================================
         # Task 0:
         # train feature extractor from scratch
         # =====================================
         if self._cur_task == 0:
-
-            self._epoch_num = (
-                self.args[
-                    "init_epochs"
-                ]
-            )
+            self._epoch_num = (self.args["init_epochs"])
 
             optimizer = optim.SGD(
                 filter(
@@ -266,12 +191,7 @@ class FeCAM(BaseLearner):
                 )
             )
 
-            self._train_function(
-                train_loader,
-                test_loader,
-                optimizer,
-                scheduler,
-            )
+            self._train_function(train_loader,test_loader,optimizer,scheduler)
 
             # Initial cosine classifier
             # weights used by official FeCAM
@@ -287,13 +207,10 @@ class FeCAM(BaseLearner):
         # optimizer training
         # =====================================
         else:
-
             self._build_protos()
-
             # Replace new cosine classifier
             # weights with class prototypes.
             self._update_fc()
-
 
         # =====================================
         # Build/update covariance statistics
@@ -301,122 +218,39 @@ class FeCAM(BaseLearner):
         self._update_covariances()
 
     def _train_function(self,train_loader,test_loader,optimizer,scheduler):
-        prog_bar = tqdm(
-            range(
-                self._epoch_num
-            )
-        )
+        prog_bar = tqdm(range(self._epoch_num))
 
         for epoch in prog_bar:
-
             self._network.train()
 
             losses = 0.0
             correct = 0
             total = 0
 
+            for (_,inputs,targets) in train_loader:
+                inputs = inputs.to(self._device,non_blocking=True)
+                targets = targets.to(self._device,dtype=torch.long,non_blocking=True)
+                logits = (self._network(inputs)["logits"])
+                loss = (F.cross_entropy(logits,targets))
 
-            for (
-                _,
-                inputs,
-                targets,
-            ) in train_loader:
-
-                inputs = inputs.to(
-                    self._device,
-                    non_blocking=True,
-                )
-
-                targets = targets.to(
-                    self._device,
-                    dtype=torch.long,
-                    non_blocking=True,
-                )
-
-
-                logits = (
-                    self._network(
-                        inputs
-                    )["logits"]
-                )
-
-
-                loss = (
-                    F.cross_entropy(
-                        logits,
-                        targets,
-                    )
-                )
-
-
-                optimizer.zero_grad(
-                    set_to_none=True
-                )
-
+                optimizer.zero_grad(set_to_none=True)
                 loss.backward()
-
                 optimizer.step()
 
+                losses += (loss.item())
 
-                losses += (
-                    loss.item()
-                )
+                preds = torch.argmax(logits,dim=1)
 
-
-                preds = torch.argmax(
-                    logits,
-                    dim=1,
-                )
-
-
-                correct += (
-                    preds.eq(
-                        targets
-                    )
-                    .sum()
-                    .item()
-                )
-
-                total += (
-                    targets.size(0)
-                )
-
+                correct += (preds.eq(targets).sum().item())
+                total += (targets.size(0))
 
             scheduler.step()
 
+            train_acc = (100.0 * correct / max(total,1))
+            test_acc = (self._compute_accuracy(self._network,test_loader,))
+            avg_loss = (losses / len(train_loader))
 
-            train_acc = (
-                100.0
-                * correct
-                / max(
-                    total,
-                    1,
-                )
-            )
-
-
-            test_acc = (
-                self._compute_accuracy(
-                    self._network,
-                    test_loader,
-                )
-            )
-
-
-            avg_loss = (
-                losses
-                / len(
-                    train_loader
-                )
-            )
-
-
-            self._last_loss = (
-                float(
-                    avg_loss
-                )
-            )
-
+            self._last_loss = (float(avg_loss))
 
             info = (
                 f"Task {self._cur_task}, "
@@ -429,49 +263,19 @@ class FeCAM(BaseLearner):
                 f"{test_acc:.2f}"
             )
 
-
-            prog_bar.set_description(
-                info
-            )
-
-            logging.info(
-                info
-            )
+            prog_bar.set_description(info)
+            logging.info(info)
 
     # Prototype extraction
     def _build_base_protos(self):
-        for class_idx in range(
-            self._known_classes,
-            self._total_classes,
-        ):
-
-            class_weight = (
-                self._network
-                .fc
-                .weight[
-                    class_idx
-                ]
-                .detach()
-                .clone()
-            )
-
-            self._init_protos.append(
-                class_weight
-            )
+        for class_idx in range(self._known_classes,self._total_classes):
+            class_weight = (self._network.fc.weight[class_idx].detach().clone())
+            self._init_protos.append(class_weight)
 
     def _build_protos(self):
         with torch.no_grad():
-
-            for class_idx in range(
-                self._known_classes,
-                self._total_classes,
-            ):
-
-                (
-                    _,
-                    _,
-                    class_dataset,
-                ) = (
+            for class_idx in range(self._known_classes,self._total_classes):
+                (_,_,class_dataset) = (
                     self.data_manager
                     .get_dataset(
                         np.arange(
@@ -510,45 +314,14 @@ class FeCAM(BaseLearner):
                     )
                 )
 
+                vectors, _ = (self._extract_vectors(class_loader))
+                class_mean = (np.mean(vectors,axis=0))
 
-                vectors, _ = (
-                    self._extract_vectors(
-                        class_loader
-                    )
-                )
+                class_mean = (torch.from_numpy(class_mean).float().to(self._device))
 
+                self._protos.append(class_mean)
 
-                class_mean = (
-                    np.mean(
-                        vectors,
-                        axis=0,
-                    )
-                )
-
-
-                class_mean = (
-                    torch.from_numpy(
-                        class_mean
-                    )
-                    .float()
-                    .to(
-                        self._device
-                    )
-                )
-
-
-                self._protos.append(
-                    class_mean
-                )
-
-
-        if (
-            len(
-                self._protos
-            )
-            != self._total_classes
-        ):
-
+        if (len(self._protos) != self._total_classes):
             raise RuntimeError(
                 "FeCAM prototype count "
                 "mismatch: "
@@ -559,26 +332,11 @@ class FeCAM(BaseLearner):
 
     # Cosine classifier
     def _update_fc(self):
-        num_new_classes = (
-            self._total_classes
-            - self._known_classes
-        )
+        num_new_classes = (self._total_classes - self._known_classes)
 
+        new_protos = torch.stack(self._protos[-num_new_classes:],dim=0).to(self._device)
 
-        new_protos = torch.stack(
-            self._protos[
-                -num_new_classes:
-            ],
-            dim=0,
-        ).to(
-            self._device
-        )
-
-
-        if not hasattr(
-            self._network.fc,
-            "fc2",
-        ):
+        if not hasattr(self._network.fc,"fc2"):
 
             raise RuntimeError(
                 "FeCAM incremental "
@@ -586,23 +344,13 @@ class FeCAM(BaseLearner):
                 "SplitCosineLinear."
             )
 
-
-        if (
-            self._network
-            .fc
-            .fc2
-            .weight
-            .shape
-            != new_protos.shape
-        ):
-
+        if (self._network.fc.fc2.weight.shape != new_protos.shape):
             raise RuntimeError(
                 "FeCAM FC/prototype "
                 "shape mismatch: "
                 f"{self._network.fc.fc2.weight.shape} "
                 f"vs {new_protos.shape}"
             )
-
 
         with torch.no_grad():
             self._network.fc.fc2.weight.copy_(
@@ -611,174 +359,61 @@ class FeCAM(BaseLearner):
 
     # Tukey transformation
     def _tukeys_transform(self,x):
-        beta = float(
-            self.args[
-                "beta"
-            ]
-        )
-
-        if not torch.is_tensor(
-            x
-        ):
-            x = torch.as_tensor(
-                x
-            )
-
+        beta = float(self.args["beta"])
+        if not torch.is_tensor(x):
+            x = torch.as_tensor(x)
 
         if beta == 0:
-
-            return torch.log(
-                torch.clamp(
-                    x,
-                    min=1e-12,
-                )
-            )
-
+            return torch.log(torch.clamp(x,min=1e-12))
 
         return torch.pow(
-            torch.clamp(
-                x,
-                min=0.0,
-            ),
-            beta,
-        )
+            torch.clamp(x,min=0.0),beta)
 
     #Covariance shrinkage
     def shrink_cov(self,cov):
-        diag_mean = torch.mean(
-            torch.diagonal(
-                cov
-            )
-        )
+        diag_mean = torch.mean(torch.diagonal(cov))
+        off_diag = (cov.clone())
+        off_diag.fill_diagonal_(0.0)
 
-
-        off_diag = (
-            cov.clone()
-        )
-
-        off_diag.fill_diagonal_(
-            0.0
-        )
-
-
-        mask = (
-            off_diag
-            != 0.0
-        )
-
+        mask = (off_diag != 0.0)
 
         if mask.any():
-
-            off_diag_mean = (
-                off_diag[
-                    mask
-                ]
-                .mean()
-            )
+            off_diag_mean = (off_diag[mask].mean())
 
         else:
-
-            off_diag_mean = (
-                cov.new_tensor(
-                    0.0
-                )
-            )
-
+            off_diag_mean = (cov.new_tensor(0.0))
 
         identity = torch.eye(
             cov.shape[0],
-
             dtype=cov.dtype,
-
-            device=cov.device,
-        )
+            device=cov.device)
 
 
-        alpha1 = float(
-            self.args[
-                "alpha1"
-            ]
-        )
+        alpha1 = float(self.args["alpha1"])
+        alpha2 = float(self.args["alpha2"])
 
-        alpha2 = float(
-            self.args[
-                "alpha2"
-            ]
-        )
-
-
-        return (
-            cov
-            + (
-                alpha1
-                * diag_mean
-                * identity
-            )
-            + (
-                alpha2
-                * off_diag_mean
-                * (
-                    1.0
-                    - identity
-                )
-            )
-        )
+        return (cov + (alpha1 * diag_mean * identity)
+            + (alpha2 * off_diag_mean * (1.0 - identity)))
 
     #Normalize covariance
     def normalize_cov(self):
-        if self.args[
-            "shrink"
-        ]:
-
-            covariances = (
-                self._cov_mat_shrink
-            )
+        if self.args["shrink"]:
+            covariances = (self._cov_mat_shrink)
 
         else:
-
-            covariances = (
-                self._cov_mat
-            )
-
+            covariances = (self._cov_mat)
 
         normalized = []
 
-
         for cov in covariances:
+            diagonal = (torch.diagonal(cov))
+            sd = torch.sqrt(torch.clamp(diagonal,min=1e-12))
 
-            diagonal = (
-                torch.diagonal(
-                    cov
-                )
-            )
+            scale = (sd.unsqueeze(1) * sd.unsqueeze(0))
 
-            sd = torch.sqrt(
-                torch.clamp(
-                    diagonal,
-                    min=1e-12,
-                )
-            )
+            normalized_cov = (cov / torch.clamp(scale,min=1e-12))
 
-
-            scale = (
-                sd.unsqueeze(1)
-                * sd.unsqueeze(0)
-            )
-
-
-            normalized_cov = (
-                cov
-                / torch.clamp(
-                    scale,
-                    min=1e-12,
-                )
-            )
-
-
-            normalized.append(
-                normalized_cov
-            )
-
+            normalized.append(normalized_cov)
 
         return normalized
 
@@ -786,16 +421,8 @@ class FeCAM(BaseLearner):
     def _compute_new_cov(self):
         with torch.no_grad():
 
-            for class_idx in range(
-                self._known_classes,
-                self._total_classes,
-            ):
-
-                (
-                    _,
-                    _,
-                    class_dataset,
-                ) = (
+            for class_idx in range(self._known_classes,self._total_classes):
+                (_,_,class_dataset) = (
                     self.data_manager
                     .get_dataset(
                         np.arange(
@@ -836,76 +463,27 @@ class FeCAM(BaseLearner):
                 )
 
 
-                vectors, _ = (
-                    self._extract_vectors(
-                        class_loader
-                    )
-                )
+                vectors, _ = (self._extract_vectors(class_loader))
 
+                vectors = (torch.from_numpy(vectors).double())
 
-                vectors = (
-                    torch.from_numpy(
-                        vectors
-                    )
-                    .double()
-                )
+                if self.args["tukey"]:
+                    vectors = (self._tukeys_transform(vectors))
 
+                vectors_np = (vectors.cpu().numpy())
+                cov = np.cov(vectors_np.T)
 
-                if self.args[
-                    "tukey"
-                ]:
-
-                    vectors = (
-                        self._tukeys_transform(
-                            vectors
-                        )
-                    )
-
-
-                vectors_np = (
-                    vectors
-                    .cpu()
-                    .numpy()
-                )
-
-
-                cov = np.cov(
-                    vectors_np.T
-                )
-
-
-                cov = (
-                    torch.from_numpy(
-                        cov
-                    )
-                    .double()
-                )
-
+                cov = (torch.from_numpy(cov).double())
 
                 # Official FeCAM performs
                 # first shrink here.
-                if self.args[
-                    "shrink"
-                ]:
+                if self.args["shrink"]:
+                    cov = (self.shrink_cov(cov))
 
-                    cov = (
-                        self.shrink_cov(
-                            cov
-                        )
-                    )
+                self._cov_mat.append(cov)
 
 
-                self._cov_mat.append(
-                    cov
-                )
-
-
-        if (
-            len(
-                self._cov_mat
-            )
-            != self._total_classes
-        ):
+        if (len(self._cov_mat) != self._total_classes):
 
             raise RuntimeError(
                 "FeCAM covariance count "
@@ -918,9 +496,7 @@ class FeCAM(BaseLearner):
     def _update_covariances(self):
         # Untuk canonical FeCAM:
         # full covariance + per-class.
-        if not self.args[
-            "full_cov"
-        ]:
+        if not self.args["full_cov"]:
 
             raise NotImplementedError(
                 "Current thesis FeCAM "
@@ -929,9 +505,7 @@ class FeCAM(BaseLearner):
             )
 
 
-        if not self.args[
-            "per_class"
-        ]:
+        if not self.args["per_class"]:
 
             raise NotImplementedError(
                 "Current thesis FeCAM "
@@ -942,375 +516,117 @@ class FeCAM(BaseLearner):
 
         self._compute_new_cov()
 
-
         # Rebuild derived covariance
         # representations for ALL classes.
         self._cov_mat_shrink = []
         self._norm_cov_mat = []
 
 
-        if self.args[
-            "shrink"
-        ]:
+        if self.args["shrink"]:
 
             # Official implementation
             # applies shrinkage a second time.
-            for cov in (
-                self._cov_mat
-            ):
-
-                self._cov_mat_shrink.append(
-                    self.shrink_cov(
-                        cov
-                    )
-                )
+            for cov in (self._cov_mat):
+                self._cov_mat_shrink.append(self.shrink_cov(cov))
 
 
-        if self.args[
-            "norm_cov"
-        ]:
+        if self.args["norm_cov"]:
+            self._norm_cov_mat = (self.normalize_cov())
 
-            self._norm_cov_mat = (
-                self.normalize_cov()
-            )
+        expected = (self._total_classes)
 
+        if self.args["norm_cov"]:
+            assert (len(self._norm_cov_mat) == expected)
 
-        expected = (
-            self._total_classes
-        )
-
-
-        if self.args[
-            "norm_cov"
-        ]:
-
-            assert (
-                len(
-                    self._norm_cov_mat
-                )
-                == expected
-            )
-
-        elif self.args[
-            "shrink"
-        ]:
-
-            assert (
-                len(
-                    self._cov_mat_shrink
-                )
-                == expected
-            )
+        elif self.args["shrink"]:
+            assert (len(self._cov_mat_shrink) == expected)
 
     #Mahalanobis distance
     def _mahalanobis(self,vectors,class_mean,cov=None):
-        if not torch.is_tensor(
-            vectors
-        ):
-            vectors = torch.as_tensor(
-                vectors,
-                dtype=torch.float32,
-                device=self._device,
-            )
+        if not torch.is_tensor(vectors):
+            vectors = torch.as_tensor(vectors,dtype=torch.float32,device=self._device)
 
         else:
+            vectors = vectors.to(self._device,dtype=torch.float32)
 
-            vectors = vectors.to(
-                self._device,
-                dtype=torch.float32,
-            )
-
-
-        if not torch.is_tensor(
-            class_mean
-        ):
-            class_mean = (
-                torch.as_tensor(
-                    class_mean,
-                    dtype=torch.float32,
-                    device=self._device,
-                )
-            )
+        if not torch.is_tensor(class_mean):
+            class_mean = (torch.as_tensor(class_mean,dtype=torch.float32,device=self._device))
 
         else:
+            class_mean = (class_mean.to(self._device,dtype=torch.float32))
 
-            class_mean = (
-                class_mean.to(
-                    self._device,
-                    dtype=torch.float32,
-                )
-            )
+        if (self.args["tukey"] and self._cur_task > 0):
+            class_mean = (self._tukeys_transform(class_mean))
 
-
-        if (
-            self.args[
-                "tukey"
-            ]
-            and
-            self._cur_task > 0
-        ):
-
-            class_mean = (
-                self._tukeys_transform(
-                    class_mean
-                )
-            )
-
-
-        vectors = F.normalize(
-            vectors,
-            p=2,
-            dim=-1,
-            eps=1e-12,
-        )
-
-        class_mean = F.normalize(
-            class_mean,
-            p=2,
-            dim=-1,
-            eps=1e-12,
-        )
-
-
-        x_minus_mu = (
-            vectors
-            - class_mean
-        )
-
+        vectors = F.normalize(vectors,p=2,dim=-1,eps=1e-12)
+        class_mean = F.normalize(class_mean,p=2,dim=-1,eps=1e-12)
+        x_minus_mu = (vectors - class_mean)
 
         if cov is None:
-
-            inv_cov = torch.eye(
-                self.feature_dim,
-
-                dtype=torch.float32,
-
-                device=self._device,
-            )
+            inv_cov = torch.eye(self.feature_dim,dtype=torch.float32,device=self._device)
 
         else:
+            cov = cov.to(self._device,dtype=torch.float32)
+            inv_cov = (torch.linalg.pinv(cov)) 
 
-            cov = cov.to(
-                self._device,
-                dtype=torch.float32,
-            )
+        left = torch.matmul(x_minus_mu,inv_cov)
+        distance = torch.sum(left * x_minus_mu,dim=1)
 
-            inv_cov = (
-                torch.linalg.pinv(
-                    cov
-                )
-            )
-
-
-        left = torch.matmul(
-            x_minus_mu,
-            inv_cov,
-        )
-
-
-        distance = torch.sum(
-            left
-            * x_minus_mu,
-            dim=1,
-        )
-
-
-        return (
-            distance
-            .detach()
-            .cpu()
-            .numpy()
-        )
+        return (distance.detach().cpu().numpy())
 
     # Mahalanobis distance for every class
     def _maha_dist(self,vectors):
-        vectors = torch.as_tensor(
-            vectors,
-            dtype=torch.float32,
-            device=self._device,
-        )
+        vectors = torch.as_tensor(vectors,dtype=torch.float32,device=self._device)
 
-
-        if (
-            self.args[
-                "tukey"
-            ]
-            and
-            self._cur_task > 0
-        ):
-
-            vectors = (
-                self._tukeys_transform(
-                    vectors
-                )
-            )
-
+        if (self.args["tukey"] and self._cur_task > 0):
+            vectors = (self._tukeys_transform(vectors))
 
         distances = []
 
-
-        for class_idx in range(
-            self._total_classes
-        ):
-
+        for class_idx in range(self._total_classes):
             # Official FeCAM initial task:
             # cosine classifier weights +
             # identity covariance.
             if self._cur_task == 0:
-
                 distance = (
-                    self._mahalanobis(
-                        vectors,
-
-                        self._init_protos[
-                            class_idx
-                        ],
-
-                        cov=None,
-                    )
-                )
-
+                    self._mahalanobis(vectors,self._init_protos[class_idx],cov=None))
 
             else:
-
-                if self.args[
-                    "norm_cov"
-                ]:
-
-                    covariance = (
-                        self._norm_cov_mat[
-                            class_idx
-                        ]
-                    )
-
-                elif self.args[
-                    "shrink"
-                ]:
-
-                    covariance = (
-                        self._cov_mat_shrink[
-                            class_idx
-                        ]
-                    )
-
+                if self.args["norm_cov"]:
+                    covariance = (self._norm_cov_mat[class_idx])
+                elif self.args["shrink"]:
+                    covariance = (self._cov_mat_shrink[class_idx])
                 else:
+                    covariance = (self._cov_mat[class_idx])
 
-                    covariance = (
-                        self._cov_mat[
-                            class_idx
-                        ]
-                    )
+                distance = (self._mahalanobis(vectors,self._protos[class_idx],covariance))
 
+            distances.append(distance)
 
-                distance = (
-                    self._mahalanobis(
-                        vectors,
-
-                        self._protos[
-                            class_idx
-                        ],
-
-                        covariance,
-                    )
-                )
-
-
-            distances.append(
-                distance
-            )
-
-
-        return np.asarray(
-            distances
-        )
+        return np.asarray(distances)
 
     #Evaluation FeCAM
     def _eval_maha(self,loader):
         self._network.eval()
-
-
-        vectors, y_true = (
-            self._extract_vectors(
-                loader
-            )
-        )
-
+        vectors, y_true = (self._extract_vectors(loader))
 
         # Same feature normalization
         # used by official FeCAM.
-        norms = np.linalg.norm(
-            vectors,
-            axis=1,
-            keepdims=True,
-        )
+        norms = np.linalg.norm(vectors,axis=1,keepdims=True)
+        vectors = (vectors / (norms + 1e-8))
+        distances = (self._maha_dist(vectors))
+        scores = (distances.T)
+        y_pred = np.argsort(scores,axis=1)[:,:self.topk]
 
-        vectors = (
-            vectors
-            / (
-                norms
-                + 1e-8
-            )
-        )
-
-
-        distances = (
-            self._maha_dist(
-                vectors
-            )
-        )
-
-
-        scores = (
-            distances.T
-        )
-
-
-        y_pred = np.argsort(
-            scores,
-            axis=1,
-        )[
-            :,
-            :self.topk,
-        ]
-
-
-        return (
-            y_pred,
-            y_true,
-        )
+        return (y_pred,y_true)
 
     def eval_task(self):
         # Diagnostic cosine classifier
-        y_pred, y_true = (
-            self._eval_cnn(
-                self.test_loader
-            )
-        )
-
-        cnn_accy = (
-            self._evaluate(
-                y_pred,
-                y_true,
-            )
-        )
-
+        y_pred, y_true = (self._eval_cnn(self.test_loader))
+        cnn_accy = (self._evaluate(y_pred,y_true))
 
         # Canonical FeCAM classifier
-        y_pred, y_true = (
-            self._eval_maha(
-                self.test_loader
-            )
-        )
+        y_pred, y_true = (self._eval_maha(self.test_loader))
+        fecam_accy = (self._evaluate(y_pred,y_true))
 
-        fecam_accy = (
-            self._evaluate(
-                y_pred,
-                y_true,
-            )
-        )
-
-
-        return (
-            cnn_accy,
-            fecam_accy,
-        )
+        return (cnn_accy,fecam_accy)

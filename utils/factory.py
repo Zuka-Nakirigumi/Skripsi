@@ -78,5 +78,8 @@ def get_model(model_name, args):
     elif name == "fecam":
         from models.fecam import FeCAM
         return FeCAM(args)
+    elif name == "efc":
+        from models.efc import EFC
+        return EFC(args)
     else:
         assert 0

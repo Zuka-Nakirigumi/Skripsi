@@ -355,6 +355,7 @@ class FeTrIL(BaseLearner):
         old_means = np.array(self._means[:self._known_classes])
         new_means = np.array(self._means[self._known_classes:])
         self._relations=np.argmax((old_means/np.linalg.norm(old_means,axis=1)[:,None])@(new_means/np.linalg.norm(new_means,axis=1)[:,None]).T,axis=1)+self._known_classes
+        
     def _build_feature_set(self):
         self.vectors_train = []
         self.labels_train = []

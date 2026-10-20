@@ -92,22 +92,13 @@ class EfficientChannelAttention(nn.Module):
         #
         # transpose:
         # [B, 1, C]
-        y = (
-            y
-            .squeeze(-1)
-            .transpose(-1, -2)
-        )
+        y = (y.squeeze(-1).transpose(-1, -2))
 
         # Local cross-channel interaction
         y = self.conv(y)
 
         # [B, C, 1, 1]
-        y = (
-            y
-            .transpose(-1, -2)
-            .unsqueeze(-1)
-        )
-
+        y = (y.transpose(-1, -2).unsqueeze(-1))
         y = self.sigmoid(y)
 
         return x * y

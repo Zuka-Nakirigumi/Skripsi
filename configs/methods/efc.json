@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "method": "EFC",
+    "reference": "simomagi/elastic_feature_consolidation",
+    "reference_commit": "8c6b6eb66bfa2d3cee9353cd5533ff4713907e6f"
+  },
+
+  "model_name": "efc",
+
+  "epochs_first_task": 160,
+  "epochs_next_task": 100,
+
+  "efc_lamb": 10.0,
+  "efc_damping": 0.1,
+  "efc_protoupdate": 0.2,
+  "efc_protobatchsize": 64,
+
+  "batch_size": 64
+}

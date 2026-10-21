@@ -1,24 +1,25 @@
 {
-    "model_name": "ssre",
+  "_meta": {
+    "method": "SSRE",
+    "reference": "PyCIL baseline",
+    "reference_commit": "f3509b8ca3f20660ce4aa13f19d5283de81b4b35"
+  },
 
-    "memory_size": 0,
-    "fixed_memory": false,
+  "model_name": "ssre",
 
-    "lambda_fkd": 1,
-    "lambda_proto": 10,
-    "temp": 0.1,
+  "epochs": 100,
 
-    "mode": "parallel_adapters",
+  "lr": 0.001,
+  "weight_decay": 0.0005,
 
-    "epochs": 101,
+  "step_size": 45,
+  "gamma": 0.1,
 
-    "lr": 0.001,
-    "weight_decay": 0.0005,
+  "lambda_fkd": 10.0,
+  "lambda_proto": 10.0,
+  "temp": 0.1,
 
-    "step_size": 45,
-    "gamma": 0.1,
+  "threshold": 0.8,
 
-    "threshold": 0.8,
-
-    "save_checkpoints": true
+  "batch_size": 128
 }

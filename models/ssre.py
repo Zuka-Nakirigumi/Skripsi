@@ -26,6 +26,15 @@ class SSRE(BaseLearner):
         self._network = IncrementalNet(args,False)
         self._protos = []
 
+        # Diagnostic values
+        self._last_loss_clf = 0.0
+        self._last_loss_fkd = 0.0
+        self._last_loss_proto = 0.0
+
+        self._last_epoch_loss_clf = 0.0
+        self._last_epoch_loss_fkd = 0.0
+        self._last_epoch_loss_proto = 0.0
+
 
 
     def after_task(self):
@@ -175,6 +184,13 @@ class SSRE(BaseLearner):
                 _, preds = torch.max(logits, dim=1)
                 correct += preds.eq(targets.expand_as(preds)).cpu().sum()
                 total += len(targets)
+
+            ## Epoch average diagnostic
+            num_batches = len(train_loader)
+            self._last_epoch_loss_clf = (losses_clf / num_batches)
+            self._last_epoch_loss_fkd = (losses_fkd / num_batches)
+            self._last_epoch_loss_proto = (losses_proto / num_batches)
+
             scheduler.step()
             train_acc = np.around(tensor2numpy(
                 correct)*100 / total, decimals=2)
@@ -270,10 +286,8 @@ class SSRE(BaseLearner):
                 ).T
             )
 
-            mask = torch.max(
-                weights,
-                dim=1,
-            )[0]
+            similarity = torch.max(weights,dim=1,)[0]
+            mask = (similarity >= float(self.args.get("threshold",0.8,))).to(features.dtype)
 
 
         loss_clf = (

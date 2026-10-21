@@ -408,7 +408,7 @@ class EFC(BaseLearner):
                     f"class {class_idx}."
                 )
 
-            class_samples = (self._gaussians[class_idx].sample((count)))
+            class_samples = self._gaussians[class_idx].sample((count,))
             samples.append(class_samples)
 
             labels.extend([class_idx] * count)

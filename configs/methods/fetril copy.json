@@ -1,0 +1,19 @@
+{
+    "model_name": "fetril",
+
+    "memory_size": 0,
+    "fixed_memory": false,
+
+    "fetril_classifier": "svm",
+
+    "svm_c": 1.0,
+    "svm_tol": 0.0001,
+
+    "init_epochs": 200,
+    "init_lr": 0.1,
+    "init_weight_decay": 0.0005,
+
+    "epochs": 50,
+    "lr": 0.05,
+    "weight_decay": 0.0005
+}

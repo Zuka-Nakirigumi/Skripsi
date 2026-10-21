@@ -1,29 +1,27 @@
 {
-    "model_name": "fecam",
+  "_meta": {
+    "method": "FeCAM",
+    "reference": "dipamgoswami/FeCAM",
+    "reference_commit": "e33f39d112ff2d2a2df2e68c490af579a50edd31"
+  },
 
-    "memory_size": 0,
-    "fixed_memory": false,
+  "model_name": "fecam",
 
-    "init_epochs": 200,
-    "init_lr": 0.1,
-    "init_weight_decay": 0.0005,
+  "init_epochs": 200,
+  "init_lr": 0.1,
+  "init_weight_decay": 0.0001,
 
-    "beta": 0.5,
+  "beta": 0.5,
+  "alpha1": 1.0,
+  "alpha2": 1.0,
 
-    "alpha1": 1.0,
-    "alpha2": 1.0,
+  "ncm": false,
+  "tukey": true,
+  "diagonal": false,
+  "per_class": true,
+  "full_cov": true,
+  "shrink": true,
+  "norm_cov": true,
 
-    "ncm": false,
-
-    "tukey": true,
-
-    "diagonal": false,
-
-    "per_class": true,
-
-    "full_cov": true,
-
-    "shrink": true,
-
-    "norm_cov": true
+  "batch_size": 128
 }

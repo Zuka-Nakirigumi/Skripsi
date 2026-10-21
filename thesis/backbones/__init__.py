@@ -17,10 +17,12 @@ from thesis.backbones.resnet_ssre import (
     SSREConvBlock,
     remote_ssre_resnet18,
     remote_ssre_resnet34,
+)
+
+from thesis.backbones.variants import (
     get_ssre_backbone_variant,
     get_all_ssre_backbone_variants
 )
-
 
 __all__ = [
     "BasicBlock",

@@ -44,7 +44,10 @@ class FeTrIL(BaseLearner):
         self._classifier_type = str(
             args.get(
                 "fetril_classifier",
-                "svm",
+                args.get(
+                    "classifier",
+                    "svm",
+                ),
             )
         ).lower()
         if self._classifier_type not in {"svm","fc"}:
@@ -258,11 +261,14 @@ class FeTrIL(BaseLearner):
 
             scheduler = (
                 optim.lr_scheduler
-                .CosineAnnealingLR(
-                    optimizer=optimizer,
-                    T_max=self.args[
-                        "init_epochs"
+                .MultiStepLR(
+                    optimizer,
+                    milestones=[
+                        50,
+                        100,
+                        150,
                     ],
+                    gamma=0.1,
                 )
             )
 

@@ -1,19 +1,21 @@
 {
-    "model_name": "fetril",
+  "_meta": {
+    "method": "FeTrIL",
+    "classifier": "linear_svm",
+    "reference": "GregoirePetit/FeTrIL",
+    "reference_commit": "e3b139ce84a735a28f1fc0f93b7ab401721f6dad"
+  },
 
-    "memory_size": 0,
-    "fixed_memory": false,
+  "model_name": "fetril",
 
-    "fetril_classifier": "svm",
+  "init_epochs": 160,
+  "init_lr": 0.1,
+  "init_weight_decay": 0.0005,
 
-    "svm_c": 1.0,
-    "svm_tol": 0.0001,
+  "classifier": "svm",
 
-    "init_epochs": 200,
-    "init_lr": 0.1,
-    "init_weight_decay": 0.0005,
+  "svm_c": 1.0,
+  "svm_tol": 0.0001,
 
-    "epochs": 50,
-    "lr": 0.05,
-    "weight_decay": 0.0005
+  "batch_size": 128
 }

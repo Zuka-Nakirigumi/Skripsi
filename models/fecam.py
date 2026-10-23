@@ -54,6 +54,13 @@ class FeCAM(BaseLearner):
     def after_task(self):
         self._known_classes = (self._total_classes)
 
+        if self.args.get("save_checkpoints",True,):
+            checkpoint_prefix = (
+                self.args.get(
+                    "checkpoint_prefix",
+                    "{}_{}_{}".format(self.args["model_name"],self.args["init_cls"],self.args["increment"],),))
+            self.save_checkpoint(checkpoint_prefix)
+
     def incremental_train(self,data_manager):
         self.data_manager = (data_manager)
         next_task = (self._cur_task + 1)

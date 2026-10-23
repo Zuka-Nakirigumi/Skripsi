@@ -2,6 +2,18 @@ from pathlib import Path
 import argparse
 import sys
 
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format=(
+        "%(asctime)s | "
+        "%(levelname)s | "
+        "%(message)s"
+    ),
+    force=True,
+)
+
 
 PROJECT_ROOT = (
     Path(__file__)
@@ -94,6 +106,12 @@ def main():
         ],
     )
 
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=None,
+    )
+
 
     parser.add_argument(
         "--device",
@@ -135,20 +153,28 @@ def main():
     )
 
 
-    overrides = None
+    overrides = {}
 
+    if args.profile_epochs is not None:
 
-    if (
-        args.profile_epochs
-        is not None
-    ):
-
-        overrides = (
+        overrides.update(
             make_profile_overrides(
                 args.method,
                 args.profile_epochs,
             )
         )
+
+
+    if args.batch_size is not None:
+
+        overrides[
+            "batch_size"
+        ] = args.batch_size
+
+
+    if not overrides:
+
+        overrides = None
 
 
     resolved = (

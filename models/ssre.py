@@ -44,8 +44,9 @@ class SSRE(BaseLearner):
             self.old_network_module_ptr = (self._old_network.module)
         else:
             self.old_network_module_ptr = (self._old_network)
-        if self.args.get("save_checkpoints",True):
-            self.save_checkpoint("{}_{}_{}".format(self.args["model_name"],self.args["init_cls"],self.args["increment"]))
+        if self.args.get("save_checkpoints",True,):
+            checkpoint_prefix = (self.args.get("checkpoint_prefix","{}_{}_{}".format(self.args["model_name"],self.args["init_cls"],self.args["increment"],),))
+            self.save_checkpoint(checkpoint_prefix)
 
     def incremental_train(self,data_manager):
         self.data_manager = data_manager
@@ -182,6 +183,16 @@ class SSRE(BaseLearner):
                 losses_fkd += loss_fkd.item()
                 losses_proto += loss_proto.item()
                 _, preds = torch.max(logits, dim=1)
+                if self._cur_task > 0:
+                    predicted_old = (
+                        preds
+                        < self._known_classes
+                    ).sum().item()
+
+                    predicted_new = (
+                        preds
+                        >= self._known_classes
+                    ).sum().item()
                 correct += preds.eq(targets.expand_as(preds)).cpu().sum()
                 total += len(targets)
 
@@ -287,7 +298,32 @@ class SSRE(BaseLearner):
             )
 
             similarity = torch.max(weights,dim=1,)[0]
-            mask = (similarity >= float(self.args.get("threshold",0.8,))).to(features.dtype)
+
+            with torch.no_grad():
+                self._last_similarity_mean = float(
+                    similarity.mean().item()
+                )
+
+                self._last_similarity_min = float(
+                    similarity.min().item()
+                )
+
+                self._last_similarity_max = float(
+                    similarity.max().item()
+                )
+
+                self._last_above_threshold_ratio = float(
+                    (
+                        similarity >= 0.8
+                    )
+                    .float()
+                    .mean()
+                    .item()
+                )
+            # Source-faithful PyCIL SSRE:
+            # gunakan cosine similarity sebagai
+            # soft weighting untuk PSM.
+            mask = similarity
 
 
         loss_clf = (

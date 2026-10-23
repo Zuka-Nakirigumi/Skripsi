@@ -341,6 +341,193 @@ def build_pycil_args(
 
     return args
 
+def save_method_state(
+    model,
+    args,
+    checkpoint_dir,
+    task_id,
+):
+
+    checkpoint_manifest = {
+        "task_id":
+            task_id,
+
+        "network_checkpoint":
+            str(
+                Path(
+                    args[
+                        "checkpoint_dir"
+                    ]
+                )
+                / f"model_{task_id}.pkl"
+            ),
+
+        "method_state":
+            str(
+                method_state_path
+            ),
+    }
+
+    _write_json(
+        Path(
+            args[
+                "checkpoint_dir"
+            ]
+        )
+        / f"checkpoint_{task_id}.json",
+        checkpoint_manifest,
+    )
+    
+    import pickle
+
+    checkpoint_dir = Path(
+        checkpoint_dir
+    )
+
+    checkpoint_dir.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    method = (
+        args["model_name"]
+        .lower()
+    )
+
+    state = {
+        "method":
+            method,
+
+        "task_id":
+            int(task_id),
+
+        "known_classes":
+            int(
+                model._known_classes
+            ),
+
+        "total_classes":
+            int(
+                model._total_classes
+            ),
+    }
+
+
+    if method == "pass":
+
+        state.update({
+            "protos":
+                model._protos,
+
+            "radius":
+                model._radius,
+
+            "radiuses":
+                model._radiuses,
+        })
+
+
+    elif method == "ssre":
+
+        state.update({
+            "protos":
+                model._protos,
+        })
+
+
+    elif method == "fetril":
+
+        state.update({
+            "means":
+                model._means,
+
+            "svm_accs":
+                model._svm_accs,
+
+            "svm_classifier":
+                model._svm_classifier,
+
+            "classifier_type":
+                model._classifier_type,
+        })
+
+
+    elif method == "fecam":
+
+        state.update({
+            "protos":
+                model._protos,
+
+            "init_protos":
+                model._init_protos,
+
+            "cov_mat":
+                model._cov_mat,
+
+            "cov_mat_shrink":
+                model._cov_mat_shrink,
+
+            "norm_cov_mat":
+                model._norm_cov_mat,
+
+            "diag_mat":
+                model._diag_mat,
+
+            "common_cov":
+                model._common_cov,
+        })
+
+
+    elif method == "efc":
+
+        state.update({
+            "task_sizes":
+                model._task_sizes,
+
+            "previous_efm":
+                (
+                    model.previous_efm
+                    .detach()
+                    .cpu()
+                    if model.previous_efm
+                    is not None
+                    else None
+                ),
+
+            "prototypes":
+                model._prototypes,
+
+            "prototype_covariances":
+                model._prototype_covariances,
+
+            "prototype_labels":
+                model._prototype_labels,
+
+            "running_prototypes":
+                model._running_prototypes,
+
+            "running_covariances":
+                model._running_covariances,
+        })
+
+
+    path = (
+        checkpoint_dir
+        / f"method_state_{task_id}.pkl"
+    )
+
+    with path.open(
+        "wb"
+    ) as file:
+
+        pickle.dump(
+            state,
+            file,
+            protocol=pickle.HIGHEST_PROTOCOL,
+        )
+
+    return path
+
 def build_data_manager(
     args,
 ):
@@ -611,12 +798,70 @@ def run_experiment(
                 ),
             )
         )
+
+        # ==========================================================
+        # Checkpoint policy
+        #
+        # experiment / production : SAVE
+        # profiling               : DO NOT SAVE
+        # ==========================================================
+
+        if run_mode not in {
+            "experiment",
+            "profiling",
+        }:
+            raise ValueError(
+                f"Unknown run_mode: {run_mode}"
+            )
+
+        is_profiling = (
+            run_mode == "profiling"
+        )
+
+        args["save_checkpoints"] = (
+            not is_profiling
+        )
+
+        checkpoint_dir = (
+            output_dir
+            / "checkpoints"
+        )
+
+        args["checkpoint_dir"] = str(
+            checkpoint_dir
+        )
+
+        args["checkpoint_prefix"] = str(
+            checkpoint_dir
+            / "model"
+        )
+
+        if args["save_checkpoints"]:
+            checkpoint_dir.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+
+        print(
+            "SAVE CKPT :",
+            args["save_checkpoints"],
+        )
+
+        print(
+            "CKPT DIR  :",
+            args["checkpoint_dir"],
+        )
+
+        _write_json(
+            output_dir
+            / "effective_args.json",
+            args,
+        )
+
         cuda_device = None
         if torch.cuda.is_available():
             cuda_device = (args["device"][0])
             torch.cuda.set_device(cuda_device)
-        args["save_checkpoints"] = False
-
 
         data_manager = (
             build_data_manager(
@@ -764,6 +1009,26 @@ def run_experiment(
             )
 
             model.after_task()
+
+            if args["save_checkpoints"]:
+
+                method_state_path = (
+                    save_method_state(
+                        model=model,
+                        args=args,
+                        checkpoint_dir=(
+                            args[
+                                "checkpoint_dir"
+                            ]
+                        ),
+                        task_id=task_id,
+                    )
+                )
+
+                print(
+                    "METHOD STATE SAVED:",
+                    method_state_path,
+                )
 
             after_task_seconds = (
                 time.perf_counter()

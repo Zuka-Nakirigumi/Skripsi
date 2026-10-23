@@ -874,6 +874,16 @@ class EFC(BaseLearner):
     def after_task(self):
         self._known_classes = (self._total_classes)
 
+        if self.args.get("save_checkpoints",True,):
+            checkpoint_prefix = (
+                self.args.get(
+                    "checkpoint_prefix",
+                    "{}_{}_{}".format(
+                        self.args["model_name"],
+                        self.args["init_cls"],
+                        self.args["increment"],),))
+            self.save_checkpoint(checkpoint_prefix)
+
     # Helper to freeze old model
     def _build_old_network(self):
         self._old_network = (copy.deepcopy(self._network))

@@ -88,8 +88,9 @@ class PASS(BaseLearner):
         # ==========================================
         # 3. Checkpoint bersifat opsional
         # ==========================================
-        if self.args.get("save_checkpoints",True):
-            self.save_checkpoint("{}_{}_{}".format(self.args["model_name"],self.args["init_cls"],self.args["increment"]))
+        if self.args.get("save_checkpoints",True,):
+            checkpoint_prefix = (self.args.get("checkpoint_prefix","{}_{}_{}".format(self.args["model_name"],self.args["init_cls"],self.args["increment"],),))
+            self.save_checkpoint(checkpoint_prefix)
 
     def incremental_train(self, data_manager):
         self.data_manager = data_manager

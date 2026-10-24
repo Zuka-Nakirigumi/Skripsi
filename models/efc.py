@@ -1295,7 +1295,13 @@ class EFC(BaseLearner):
         return (np.concatenate(y_pred,axis=0),np.concatenate(y_true,axis=0))
 
     def eval_task(self):
-        (y_pred,y_true) = (self._eval_multihead(self.test_loader))
-        cnn_accy = (self._evaluate(y_pred,y_true))
+        y_pred, y_true = (self._eval_multihead(self.test_loader))
+        cnn_accy = (self._evaluate(y_pred,y_true,))
+        self._last_canonical_y_pred = (np.asarray(y_pred))
+        self._last_canonical_y_true = (np.asarray(y_true))
+        self._canonical_eval_name = ("cnn")
 
-        return (cnn_accy,None)
+        return (
+            cnn_accy,
+            None,
+        )

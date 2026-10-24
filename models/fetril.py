@@ -91,11 +91,21 @@ class FeTrIL(BaseLearner):
     def eval_task(self,save_conf=False):
         if (self._classifier_type == "svm"):
             y_pred, y_true = (self._eval_svm())
-            svm_accy = (self._evaluate(y_pred,y_true))
+            svm_accy = (self._evaluate(y_pred,y_true,))
+            self._last_canonical_y_pred = (np.asarray(y_pred))
+            self._last_canonical_y_true = (np.asarray(y_true))
+            self._canonical_eval_name = ("fetril_svm")
 
-            return (svm_accy,None)
+            return (svm_accy,None,)
 
-        return super().eval_task(save_conf=save_conf)
+        result = (super().eval_task(save_conf=save_conf))
+        y_pred, y_true = (self._eval_cnn(self.test_loader))
+
+        self._last_canonical_y_pred = (np.asarray(y_pred))
+        self._last_canonical_y_true = (np.asarray(y_true))
+        self._canonical_eval_name = ("fetril_fc")
+
+        return result
 
     def after_task(self):
         self._known_classes = (self._total_classes)

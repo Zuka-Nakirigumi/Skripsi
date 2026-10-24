@@ -14,6 +14,19 @@ import torch
 from utils import factory
 from utils.data_manager import DataManager
 
+import platform
+import subprocess
+import sys
+
+from thesis.metrics.continual_metrics import (
+    canonical_top1,
+    task_accuracy_row,
+    class_accuracy_row,
+    macro_f1_seen,
+    confusion_seen,
+    build_continual_summary,
+)
+
 
 def _json_default(
     value,
@@ -341,43 +354,117 @@ def build_pycil_args(
 
     return args
 
+
+def _cpuify_state(
+    value,
+):
+    if torch.is_tensor(value):
+        return (
+            value
+            .detach()
+            .cpu()
+        )
+
+    if isinstance(
+        value,
+        dict,
+    ):
+        return {
+            key:
+                _cpuify_state(item)
+            for key, item
+            in value.items()
+        }
+
+    if isinstance(
+        value,
+        list,
+    ):
+        return [
+            _cpuify_state(item)
+            for item in value
+        ]
+
+    if isinstance(
+        value,
+        tuple,
+    ):
+        return tuple(
+            _cpuify_state(item)
+            for item in value
+        )
+
+    return value
+
+
+def save_network_checkpoint(
+    model,
+    checkpoint_dir,
+    task_id,
+):
+    checkpoint_dir = Path(
+        checkpoint_dir
+    )
+
+    checkpoint_dir.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    network = model._network
+
+    if hasattr(
+        network,
+        "module",
+    ):
+        network = (
+            network.module
+        )
+
+    path = (
+        checkpoint_dir
+        / f"model_{task_id}.pkl"
+    )
+
+    checkpoint = {
+        "tasks":
+            int(
+                model._cur_task
+            ),
+
+        "model_state_dict":
+            {
+                key:
+                    tensor
+                    .detach()
+                    .cpu()
+                for key, tensor
+                in network
+                .state_dict()
+                .items()
+            },
+    }
+
+    torch.save(
+        checkpoint,
+        path,
+    )
+
+    if not path.exists():
+        raise RuntimeError(
+            "Network checkpoint was "
+            f"not created: {path}"
+        )
+
+    return path
+
+
 def save_method_state(
     model,
     args,
     checkpoint_dir,
     task_id,
 ):
-
-    checkpoint_manifest = {
-        "task_id":
-            task_id,
-
-        "network_checkpoint":
-            str(
-                Path(
-                    args[
-                        "checkpoint_dir"
-                    ]
-                )
-                / f"model_{task_id}.pkl"
-            ),
-
-        "method_state":
-            str(
-                method_state_path
-            ),
-    }
-
-    _write_json(
-        Path(
-            args[
-                "checkpoint_dir"
-            ]
-        )
-        / f"checkpoint_{task_id}.json",
-        checkpoint_manifest,
-    )
-    
     import pickle
 
     checkpoint_dir = Path(
@@ -485,14 +572,7 @@ def save_method_state(
                 model._task_sizes,
 
             "previous_efm":
-                (
-                    model.previous_efm
-                    .detach()
-                    .cpu()
-                    if model.previous_efm
-                    is not None
-                    else None
-                ),
+                model.previous_efm,
 
             "prototypes":
                 model._prototypes,
@@ -511,6 +591,12 @@ def save_method_state(
         })
 
 
+    state = (
+        _cpuify_state(
+            state
+        )
+    )
+
     path = (
         checkpoint_dir
         / f"method_state_{task_id}.pkl"
@@ -525,6 +611,54 @@ def save_method_state(
             file,
             protocol=pickle.HIGHEST_PROTOCOL,
         )
+
+    if not path.exists():
+        raise RuntimeError(
+            "Method-state checkpoint was "
+            f"not created: {path}"
+        )
+
+    return path
+
+
+def write_checkpoint_manifest(
+    checkpoint_dir,
+    task_id,
+    network_checkpoint_path,
+    method_state_path,
+):
+    checkpoint_dir = Path(
+        checkpoint_dir
+    )
+
+    manifest = {
+        "task_id":
+            int(task_id),
+
+        "network_checkpoint":
+            str(
+                network_checkpoint_path
+            ),
+
+        "method_state":
+            str(
+                method_state_path
+            ),
+
+        "saved_at":
+            datetime.now()
+            .isoformat(),
+    }
+
+    path = (
+        checkpoint_dir
+        / f"checkpoint_{task_id}.json"
+    )
+
+    _write_json(
+        path,
+        manifest,
+    )
 
     return path
 
@@ -693,6 +827,248 @@ def get_primary_metric(
             secondary_accy,
     }
 
+
+def _extract_primary_top1(
+    primary,
+):
+    if not isinstance(
+        primary,
+        dict,
+    ):
+        return None
+
+    if primary.get(
+        "top1"
+    ) is not None:
+        return float(
+            primary[
+                "top1"
+            ]
+        )
+
+    metrics = (
+        primary.get(
+            "metrics"
+        )
+    )
+
+    if (
+        isinstance(
+            metrics,
+            dict,
+        )
+        and metrics.get(
+            "top1"
+        )
+        is not None
+    ):
+        return float(
+            metrics[
+                "top1"
+            ]
+        )
+
+    return None
+
+
+def _run_command(
+    command,
+):
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        return {
+            "returncode":
+                result.returncode,
+
+            "stdout":
+                result.stdout.strip(),
+
+            "stderr":
+                result.stderr.strip(),
+        }
+
+    except Exception as exc:
+        return {
+            "returncode": None,
+            "stdout": "",
+            "stderr": str(exc),
+        }
+
+
+def build_provenance(
+    resolved_config,
+    args,
+    model,
+    device_index,
+):
+    git_commit = (
+        _run_command(
+            [
+                "git",
+                "rev-parse",
+                "HEAD",
+            ]
+        )
+    )
+
+    git_status = (
+        _run_command(
+            [
+                "git",
+                "status",
+                "--porcelain",
+            ]
+        )
+    )
+
+    total_parameters = sum(
+        parameter.numel()
+        for parameter in
+        model._network.parameters()
+    )
+
+    trainable_parameters = sum(
+        parameter.numel()
+        for parameter in
+        model._network.parameters()
+        if parameter.requires_grad
+    )
+
+    if torch.cuda.is_available():
+        gpu_name = (
+            torch.cuda
+            .get_device_name(
+                device_index
+            )
+        )
+
+        gpu_total_gb = (
+            torch.cuda
+            .get_device_properties(
+                device_index
+            )
+            .total_memory
+            / (1024 ** 3)
+        )
+
+    else:
+        gpu_name = "CPU"
+        gpu_total_gb = None
+
+    return {
+        "run_id":
+            resolved_config[
+                "run_id"
+            ],
+
+        "dataset":
+            resolved_config[
+                "dataset"
+            ],
+
+        "method":
+            resolved_config[
+                "method"
+            ],
+
+        "backbone":
+            resolved_config[
+                "backbone"
+            ],
+
+        "attention":
+            resolved_config[
+                "attention"
+            ],
+
+        "training_seed":
+            int(
+                resolved_config[
+                    "training_seed"
+                ]
+            ),
+
+        "batch_size":
+            int(
+                args[
+                    "batch_size"
+                ]
+            ),
+
+        "model_parameters_pre_task0": {
+            "total": int(
+                total_parameters
+            ),
+            "trainable": int(
+                trainable_parameters
+            ),
+        },
+
+        "python_version":
+            sys.version,
+
+        "platform":
+            platform.platform(),
+
+        "torch_version":
+            torch.__version__,
+
+        "cuda_runtime":
+            torch.version.cuda,
+
+        "numpy_version":
+            np.__version__,
+
+        "device_index":
+            int(
+                device_index
+            ),
+
+        "device_name":
+            gpu_name,
+
+        "device_total_vram_gb":
+            gpu_total_gb,
+
+        "git_commit":
+            git_commit[
+                "stdout"
+            ],
+
+        "git_dirty":
+            bool(
+                git_status[
+                    "stdout"
+                ]
+            ),
+
+        "git_status":
+            git_status[
+                "stdout"
+            ],
+
+        "method_reference":
+            resolved_config
+            .get(
+                "method_config",
+                {},
+            )
+            .get(
+                "_meta",
+                {},
+            ),
+
+        "generated_at":
+            datetime.now()
+            .isoformat(),
+    }
+
 def run_experiment(
     resolved_config,
     output_root="outputs/experiments",
@@ -739,6 +1115,43 @@ def run_experiment(
         config_path,
         resolved_config,
     )
+
+    if (run_mode == "experiment" and status_path.exists()):
+        try:
+            with status_path.open(
+                "r",
+                encoding="utf-8",
+            ) as file:
+                existing_status = (
+                    json.load(file)
+                )
+
+            if (
+                existing_status
+                .get("state")
+                == "completed"
+            ):
+                summary_path = (
+                    output_dir
+                    / "summary.json"
+                )
+
+                if summary_path.exists():
+                    print(
+                        "SKIP COMPLETED: "
+                        f"{run_id}"
+                    )
+
+                    with summary_path.open(
+                        "r",
+                        encoding="utf-8",
+                    ) as file:
+                        return json.load(
+                            file
+                        )
+
+        except Exception:
+            pass
 
 
     started_at = (
@@ -809,6 +1222,7 @@ def run_experiment(
         if run_mode not in {
             "experiment",
             "profiling",
+            "sanity",
         }:
             raise ValueError(
                 f"Unknown run_mode: {run_mode}"
@@ -852,12 +1266,6 @@ def run_experiment(
             args["checkpoint_dir"],
         )
 
-        _write_json(
-            output_dir
-            / "effective_args.json",
-            args,
-        )
-
         cuda_device = None
         if torch.cuda.is_available():
             cuda_device = (args["device"][0])
@@ -888,6 +1296,24 @@ def run_experiment(
         )
 
 
+        _write_json(
+            output_dir
+            / "effective_args.json",
+            args,
+        )
+
+        _write_json(
+            output_dir
+            / "provenance.json",
+            build_provenance(
+                resolved_config,
+                args,
+                model,
+                device_index,
+            ),
+        )
+
+
         task_count = (
             data_manager.nb_tasks
         )
@@ -909,6 +1335,70 @@ def run_experiment(
 
 
         task_results = []
+
+        task_sizes = [
+            int(
+                data_manager
+                .get_task_size(
+                    task_id
+                )
+            )
+            for task_id
+            in range(
+                data_manager.nb_tasks
+            )
+        ]
+
+        max_classes = int(
+            sum(
+                task_sizes
+            )
+        )
+
+        task_accuracy_matrix = (
+            np.full(
+                (
+                    data_manager.nb_tasks,
+                    data_manager.nb_tasks,
+                ),
+                np.nan,
+                dtype=np.float64,
+            )
+        )
+
+        class_accuracy_matrix = (
+            np.full(
+                (
+                    data_manager.nb_tasks,
+                    max_classes,
+                ),
+                np.nan,
+                dtype=np.float64,
+            )
+        )
+
+        joint_accuracy_history = []
+        macro_f1_history = []
+
+        predictions_dir = (
+            output_dir
+            / "predictions"
+        )
+
+        confusion_dir = (
+            output_dir
+            / "confusion_matrices"
+        )
+
+        predictions_dir.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        confusion_dir.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
 
 
         for task_id in range(
@@ -983,21 +1473,136 @@ def run_experiment(
                 model.eval_task()
             )
 
+            if not hasattr(
+                model,
+                "_last_canonical_y_pred",
+            ):
+                raise RuntimeError(
+                    "Learner did not expose "
+                    "canonical predictions."
+                )
+
+            if not hasattr(
+                model,
+                "_last_canonical_y_true",
+            ):
+                raise RuntimeError(
+                    "Learner did not expose "
+                    "canonical targets."
+                )
+
+
+            canonical_y_pred = (
+                np.asarray(
+                    model
+                    ._last_canonical_y_pred
+                )
+            )
+
+            canonical_y_true = (
+                np.asarray(
+                    model
+                    ._last_canonical_y_true
+                )
+            )
+
+
+            if (
+                canonical_y_pred.shape[0]
+                != canonical_y_true.shape[0]
+            ):
+                raise RuntimeError(
+                    "Canonical prediction/target "
+                    "length mismatch."
+                )
+
+
+            canonical_accuracy = (
+                canonical_top1(
+                    canonical_y_pred,
+                    canonical_y_true,
+                )
+            )
+
+
+            joint_accuracy_history.append(
+                canonical_accuracy
+            )
+
+
+            macro_f1 = (
+                macro_f1_seen(
+                    canonical_y_pred,
+                    canonical_y_true,
+                    model._total_classes,
+                )
+            )
+
+            macro_f1_history.append(
+                macro_f1
+            )
+
+
+            task_accuracy_matrix[
+                task_id
+            ] = (
+                task_accuracy_row(
+                    canonical_y_pred,
+                    canonical_y_true,
+                    task_sizes,
+                    task_id,
+                )
+            )
+
+
+            class_accuracy_matrix[
+                task_id
+            ] = (
+                class_accuracy_row(
+                    canonical_y_pred,
+                    canonical_y_true,
+                    model._total_classes,
+                    max_classes,
+                )
+            )
+
+
+            np.savez_compressed(
+                predictions_dir
+                / (
+                    f"task_{task_id:02d}.npz"
+                ),
+
+                y_true=canonical_y_true,
+
+                y_pred_topk=(
+                    canonical_y_pred
+                ),
+            )
+
+
+            conf_matrix = (
+                confusion_seen(
+                    canonical_y_pred,
+                    canonical_y_true,
+                    model._total_classes,
+                )
+            )
+
+
+            np.save(
+                confusion_dir
+                / (
+                    f"task_{task_id:02d}.npy"
+                ),
+                conf_matrix,
+            )
+
             eval_seconds = (
                 time.perf_counter()
                 - eval_start
             )
 
-
-            primary = (
-                get_primary_metric(
-                    args[
-                        "model_name"
-                    ],
-                    model,
-                    eval_result,
-                )
-            )
 
 
             # ==========================================
@@ -1008,9 +1613,48 @@ def run_experiment(
                 time.perf_counter()
             )
 
-            model.after_task()
+            save_enabled = bool(
+                args[
+                    "save_checkpoints"
+                ]
+            )
 
-            if args["save_checkpoints"]:
+            original_save_flag = (
+                args.get(
+                    "save_checkpoints",
+                    False,
+                )
+            )
+
+            # PASS/SSRE historically save inside after_task().
+            # Disable that method-specific side effect temporarily;
+            # runner performs one standardized checkpoint for all methods.
+            if save_enabled:
+                args[
+                    "save_checkpoints"
+                ] = False
+
+            try:
+                model.after_task()
+
+            finally:
+                args[
+                    "save_checkpoints"
+                ] = original_save_flag
+
+            if save_enabled:
+
+                network_checkpoint_path = (
+                    save_network_checkpoint(
+                        model=model,
+                        checkpoint_dir=(
+                            args[
+                                "checkpoint_dir"
+                            ]
+                        ),
+                        task_id=task_id,
+                    )
+                )
 
                 method_state_path = (
                     save_method_state(
@@ -1025,9 +1669,36 @@ def run_experiment(
                     )
                 )
 
+                checkpoint_manifest_path = (
+                    write_checkpoint_manifest(
+                        checkpoint_dir=(
+                            args[
+                                "checkpoint_dir"
+                            ]
+                        ),
+                        task_id=task_id,
+                        network_checkpoint_path=(
+                            network_checkpoint_path
+                        ),
+                        method_state_path=(
+                            method_state_path
+                        ),
+                    )
+                )
+
+                print(
+                    "NETWORK CKPT SAVED:",
+                    network_checkpoint_path,
+                )
+
                 print(
                     "METHOD STATE SAVED:",
                     method_state_path,
+                )
+
+                print(
+                    "CKPT MANIFEST SAVED:",
+                    checkpoint_manifest_path,
                 )
 
             after_task_seconds = (
@@ -1074,6 +1745,29 @@ def run_experiment(
                 )
             )
 
+            primary_top1 = (
+                _extract_primary_top1(
+                    primary
+                )
+            )
+
+            if (
+                primary_top1
+                is not None
+                and abs(
+                    primary_top1
+                    - canonical_accuracy
+                ) > 0.051
+            ):
+                raise RuntimeError(
+                    "Canonical prediction accuracy "
+                    "does not match the primary metric. "
+                    f"primary={primary_top1:.4f}, "
+                    f"canonical={canonical_accuracy:.4f}, "
+                    f"method={args['model_name']}, "
+                    f"task={task_id}."
+                )
+
 
             task_result = {
                 "task_id":
@@ -1108,6 +1802,51 @@ def run_experiment(
 
                 "primary":
                     primary,
+
+                "canonical_classifier":
+                    getattr(
+                        model,
+                        "_canonical_eval_name",
+                        None,
+                    ),
+
+                "canonical_top1":
+                    canonical_accuracy,
+
+                "macro_f1":
+                    macro_f1,
+
+                "task_accuracy":
+                    [
+                        (
+                            None
+                            if np.isnan(value)
+                            else float(value)
+                        )
+                        for value
+                        in task_accuracy_matrix[
+                            task_id
+                        ]
+                    ],
+
+                "evaluation_role": {
+                    "primary": [
+                        "aia",
+                        "last_task_accuracy",
+                    ],
+                    "supporting": [
+                        "macro_f1_final",
+                        "forgetting_rate",
+                        "bwt",
+                    ],
+                    "cross_run": [
+                        "delta_aia",
+                        "mean_delta_aia",
+                        "delta_lta",
+                        "delta_macro_f1",
+                        "attention_win_rate",
+                    ],
+                }
             }
 
 
@@ -1122,10 +1861,95 @@ def run_experiment(
                 task_results,
             )
 
+            continual_summary = (
+                build_continual_summary(
+                    joint_accuracy_history,
+                    macro_f1_history,
+                    task_accuracy_matrix,
+                    class_accuracy_matrix,
+                    completed_tasks=(
+                        task_id + 1
+                    ),
+                )
+            )
+
+
+            continual_summary[
+                "task_accuracy_matrix"
+            ] = [
+                [
+                    (
+                        None
+                        if np.isnan(value)
+                        else float(value)
+                    )
+                    for value in row
+                ]
+                for row in (
+                    task_accuracy_matrix
+                )
+            ]
+
+
+            continual_summary[
+                "class_accuracy_matrix"
+            ] = [
+                [
+                    (
+                        None
+                        if np.isnan(value)
+                        else float(value)
+                    )
+                    for value in row
+                ]
+                for row in (
+                    class_accuracy_matrix
+                )
+            ]
+
+
+            continual_summary[
+                "evaluation_role"
+            ] = {
+                "primary": [
+                    "aia",
+                    "last_task_accuracy",
+                ],
+                "supporting": [
+                    "macro_f1_final",
+                    "forgetting_rate",
+                    "bwt",
+                ],
+                "cross_run": [
+                    "delta_aia",
+                    "mean_delta_aia",
+                    "delta_lta",
+                    "delta_macro_f1",
+                    "attention_win_rate",
+                ],
+                "efficiency": [
+                    "runtime",
+                    "peak_vram",
+                    "parameter_count",
+                ],
+            }
+
+            _write_json(
+                output_dir
+                / "continual_metrics.json",
+                continual_summary,
+            )
+
 
         total_seconds = (
             time.perf_counter()
             - run_start
+        )
+
+        np.save(
+            output_dir
+            / "final_confusion_matrix.npy",
+            conf_matrix,
         )
 
 
@@ -1160,6 +1984,9 @@ def run_experiment(
                     if cuda_device is not None
                     else "CPU"
                 ),
+
+            "continual_metrics":
+                continual_summary,
         }
 
 

@@ -629,11 +629,15 @@ class FeCAM(BaseLearner):
 
     def eval_task(self):
         # Diagnostic cosine classifier
-        y_pred, y_true = (self._eval_cnn(self.test_loader))
-        cnn_accy = (self._evaluate(y_pred,y_true))
+        y_pred_cnn, y_true_cnn = (self._eval_cnn(self.test_loader))
+        cnn_accy = (self._evaluate(y_pred_cnn,y_true_cnn,))
 
-        # Canonical FeCAM classifier
+        # Canonical FeCAM:
+        # Mahalanobis classifier
         y_pred, y_true = (self._eval_maha(self.test_loader))
-        fecam_accy = (self._evaluate(y_pred,y_true))
+        fecam_accy = (self._evaluate(y_pred,y_true,))
+        self._last_canonical_y_pred = (np.asarray(y_pred))
+        self._last_canonical_y_true = (np.asarray(y_true))
+        self._canonical_eval_name = ("fecam_mahalanobis")
 
-        return (cnn_accy,fecam_accy)
+        return (cnn_accy,fecam_accy,)

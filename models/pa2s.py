@@ -316,6 +316,10 @@ class PASS(BaseLearner):
         y_pred, y_true = self._eval_cnn(self.test_loader)
         cnn_accy = self._evaluate(y_pred, y_true)
 
+        self._last_canonical_y_pred = (np.asarray(y_pred))
+        self._last_canonical_y_true = (np.asarray(y_true))
+        self._canonical_eval_name = ("cnn")
+
         if hasattr(self, '_class_means'):
             y_pred, y_true = self._eval_nme(self.test_loader, self._class_means)
             nme_accy = self._evaluate(y_pred, y_true)

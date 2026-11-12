@@ -1,0 +1,30 @@
+{
+  "run_id": "aid_efc_t10_r34_eca_seed1993",
+  "dataset": "aid",
+  "method": "efc",
+  "backbone": "r34",
+  "attention": "eca",
+  "training_seed": 1993,
+  "batch_size": 12,
+  "model_parameters_pre_task0": {
+    "total": 21284746,
+    "trainable": 21284746
+  },
+  "python_version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+  "platform": "Linux-5.15.0-179-generic-x86_64-with-glibc2.35",
+  "torch_version": "2.6.0+cu124",
+  "cuda_runtime": "12.4",
+  "numpy_version": "1.26.4",
+  "device_index": 1,
+  "device_name": "NVIDIA RTX A5000",
+  "device_total_vram_gb": 23.672607421875,
+  "git_commit": "",
+  "git_dirty": false,
+  "git_status": "",
+  "method_reference": {
+    "method": "EFC",
+    "reference": "simomagi/elastic_feature_consolidation",
+    "reference_commit": "8c6b6eb66bfa2d3cee9353cd5533ff4713907e6f"
+  },
+  "generated_at": "2026-10-31T03:27:50.087913"
+}

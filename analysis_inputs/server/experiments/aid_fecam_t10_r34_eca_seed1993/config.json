@@ -1,0 +1,79 @@
+{
+  "run_id": "aid_fecam_t10_r34_eca_seed1993",
+  "dataset": "aid",
+  "method": "fecam",
+  "protocol": "T10",
+  "backbone": "r34",
+  "attention": "eca",
+  "training_seed": 1993,
+  "dataset_config": {
+    "dataset": "aid",
+    "display_name": "AID",
+    "num_classes": 30,
+    "input_size": 600,
+    "dataset_root": "datasets/raw/AID",
+    "split_root": "splits/aid/seed_1993",
+    "train_manifest": "splits/aid/seed_1993/train.csv",
+    "test_manifest": "splits/aid/seed_1993/test.csv",
+    "task_configs": {
+      "T5": "splits/aid/seed_1993/T5_tasks.json",
+      "T10": "splits/aid/seed_1993/T10_tasks.json"
+    },
+    "expected_train_images": 8000,
+    "expected_test_images": 2000,
+    "normalization": {
+      "source": "train_split_only",
+      "mean": [
+        0.3975528437637017,
+        0.40895273597365867,
+        0.368011395457626
+      ],
+      "std": [
+        0.21716769319444088,
+        0.19427591916533118,
+        0.19169160576482103
+      ]
+    },
+    "train_transform": {
+      "random_crop": 600,
+      "padding": 4,
+      "padding_mode": "reflect",
+      "horizontal_flip": 0.5
+    },
+    "sampler": {
+      "type": "weighted_inverse_frequency",
+      "replacement": true,
+      "num_samples": "dataset_length"
+    },
+    "_config_path": "/home/jason/PyCIL/configs/datasets/aid.json"
+  },
+  "method_config": {
+    "_meta": {
+      "method": "FeCAM",
+      "reference": "dipamgoswami/FeCAM",
+      "reference_commit": "e33f39d112ff2d2a2df2e68c490af579a50edd31"
+    },
+    "model_name": "fecam",
+    "init_epochs": 200,
+    "init_lr": 0.1,
+    "init_weight_decay": 0.0001,
+    "beta": 0.5,
+    "alpha1": 1.0,
+    "alpha2": 1.0,
+    "ncm": false,
+    "tukey": true,
+    "diagonal": false,
+    "per_class": true,
+    "full_cov": true,
+    "shrink": true,
+    "norm_cov": true,
+    "batch_size": 64,
+    "_config_path": "/home/jason/PyCIL/configs/methods/fecam.json"
+  },
+  "resolved_paths": {
+    "dataset_root": "/home/jason/PyCIL/datasets/raw/AID",
+    "train_manifest": "/home/jason/PyCIL/splits/aid/seed_1993/train.csv",
+    "test_manifest": "/home/jason/PyCIL/splits/aid/seed_1993/test.csv",
+    "task_config": "/home/jason/PyCIL/splits/aid/seed_1993/T10_tasks.json"
+  }
+}

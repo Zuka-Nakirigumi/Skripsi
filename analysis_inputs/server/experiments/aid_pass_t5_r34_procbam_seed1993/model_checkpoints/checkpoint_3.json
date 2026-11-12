@@ -1,0 +1,6 @@
+{
+  "task_id": 3,
+  "network_checkpoint": "/home/jason/PyCIL/outputs/experiments/aid_pass_t5_r34_procbam_seed1993/model_checkpoints/model_3.pkl",
+  "method_state": "/home/jason/PyCIL/outputs/experiments/aid_pass_t5_r34_procbam_seed1993/model_checkpoints/method_state_3.pkl",
+  "saved_at": "2026-11-09T07:26:15.551667"
+}

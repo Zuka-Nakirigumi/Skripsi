@@ -1,0 +1,328 @@
+[
+  {
+    "task_id": 0,
+    "seen_classes": 14,
+    "train_seconds": 12261.20435419865,
+    "eval_seconds": 13.317987944930792,
+    "after_task_seconds": 0.2165303248912096,
+    "runtime_seconds": 12274.738875407726,
+    "runtime_minutes": 204.57898125679543,
+    "peak_vram_allocated_gb": 19.163713455200195,
+    "peak_vram_reserved_gb": 23.07421875,
+    "primary": {
+      "name": "fecam_mahalanobis",
+      "metrics": {
+        "grouped": {
+          "total": 96.17,
+          "00-09": 96.63,
+          "10-19": 95.17,
+          "old": 0,
+          "new": 96.17
+        },
+        "top1": 96.17,
+        "top5": 99.67
+      },
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 96.17,
+          "00-09": 96.63,
+          "10-19": 95.17,
+          "old": 0,
+          "new": 96.17
+        },
+        "top1": 96.17,
+        "top5": 99.67
+      }
+    },
+    "canonical_classifier": "fecam_mahalanobis",
+    "canonical_top1": 96.1706783369803,
+    "macro_f1": 96.0826897493263,
+    "task_accuracy": [
+      96.1706783369803,
+      null,
+      null,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 1,
+    "seen_classes": 18,
+    "train_seconds": 20.113453555852175,
+    "eval_seconds": 16.115312496200204,
+    "after_task_seconds": 0.2729793172329664,
+    "runtime_seconds": 36.501749670132995,
+    "runtime_minutes": 0.6083624945022166,
+    "peak_vram_allocated_gb": 3.1843037605285645,
+    "peak_vram_reserved_gb": 4.185546875,
+    "primary": {
+      "name": "fecam_mahalanobis",
+      "metrics": {
+        "grouped": {
+          "total": 88.05,
+          "00-09": 91.03,
+          "10-19": 84.48,
+          "old": 91.9,
+          "new": 72.84
+        },
+        "top1": 88.05,
+        "top5": 98.95
+      },
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 72.77,
+          "00-09": 71.15,
+          "10-19": 74.71,
+          "old": 73.09,
+          "new": 71.55
+        },
+        "top1": 72.77,
+        "top5": 97.64
+      }
+    },
+    "canonical_classifier": "fecam_mahalanobis",
+    "canonical_top1": 88.04537521815008,
+    "macro_f1": 87.67444752336516,
+    "task_accuracy": [
+      91.90371991247265,
+      72.84482758620689,
+      null,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 2,
+    "seen_classes": 22,
+    "train_seconds": 21.84042038396001,
+    "eval_seconds": 18.587465217337012,
+    "after_task_seconds": 0.3116714730858803,
+    "runtime_seconds": 40.73956177942455,
+    "runtime_minutes": 0.6789926963237425,
+    "peak_vram_allocated_gb": 3.1843199729919434,
+    "peak_vram_reserved_gb": 4.185546875,
+    "primary": {
+      "name": "fecam_mahalanobis",
+      "metrics": {
+        "grouped": {
+          "total": 80.78,
+          "00-09": 86.7,
+          "10-19": 78.89,
+          "20-29": 63.89,
+          "old": 84.73,
+          "new": 65.17
+        },
+        "top1": 80.78,
+        "top5": 98.12
+      },
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 62.26,
+          "00-09": 57.53,
+          "10-19": 69.61,
+          "20-29": 48.61,
+          "old": 63.35,
+          "new": 57.93
+        },
+        "top1": 62.26,
+        "top5": 93.66
+      }
+    },
+    "canonical_classifier": "fecam_mahalanobis",
+    "canonical_top1": 80.77994428969359,
+    "macro_f1": 80.70485636001071,
+    "task_accuracy": [
+      88.8402625820569,
+      68.53448275862068,
+      65.17241379310344,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 3,
+    "seen_classes": 26,
+    "train_seconds": 21.435133581981063,
+    "eval_seconds": 21.279939087107778,
+    "after_task_seconds": 0.3477192632853985,
+    "runtime_seconds": 43.062795992940664,
+    "runtime_minutes": 0.717713266549011,
+    "peak_vram_allocated_gb": 3.1843361854553223,
+    "peak_vram_reserved_gb": 4.185546875,
+    "primary": {
+      "name": "fecam_mahalanobis",
+      "metrics": {
+        "grouped": {
+          "total": 78.55,
+          "00-09": 85.1,
+          "10-19": 77.69,
+          "20-29": 70.28,
+          "old": 79.39,
+          "new": 74.29
+        },
+        "top1": 78.55,
+        "top5": 97.38
+      },
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 59.15,
+          "00-09": 52.08,
+          "10-19": 66.17,
+          "20-29": 58.49,
+          "old": 57.52,
+          "new": 67.5
+        },
+        "top1": 59.15,
+        "top5": 91.2
+      }
+    },
+    "canonical_classifier": "fecam_mahalanobis",
+    "canonical_top1": 78.55477855477857,
+    "macro_f1": 78.57476650973065,
+    "task_accuracy": [
+      87.30853391684902,
+      67.67241379310344,
+      63.793103448275865,
+      74.28571428571429,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 4,
+    "seen_classes": 30,
+    "train_seconds": 22.583924394100904,
+    "eval_seconds": 24.218499556183815,
+    "after_task_seconds": 0.38568824529647827,
+    "runtime_seconds": 47.18811565078795,
+    "runtime_minutes": 0.7864685941797992,
+    "peak_vram_allocated_gb": 3.184352397918701,
+    "peak_vram_reserved_gb": 4.185546875,
+    "primary": {
+      "name": "fecam_mahalanobis",
+      "metrics": {
+        "grouped": {
+          "total": 77.2,
+          "00-09": 84.13,
+          "10-19": 77.4,
+          "20-29": 70.9,
+          "old": 77.56,
+          "new": 75.0
+        },
+        "top1": 77.2,
+        "top5": 96.95
+      },
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 54.75,
+          "00-09": 46.96,
+          "10-19": 56.59,
+          "20-29": 59.89,
+          "old": 52.68,
+          "new": 67.25
+        },
+        "top1": 54.75,
+        "top5": 90.75
+      }
+    },
+    "canonical_classifier": "fecam_mahalanobis",
+    "canonical_top1": 77.2,
+    "macro_f1": 77.18718202841764,
+    "task_accuracy": [
+      86.43326039387308,
+      67.67241379310344,
+      63.793103448275865,
+      71.07142857142857,
+      75.0
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  }
+]

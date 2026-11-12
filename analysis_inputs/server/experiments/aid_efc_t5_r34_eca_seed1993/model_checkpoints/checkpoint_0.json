@@ -1,0 +1,6 @@
+{
+  "task_id": 0,
+  "network_checkpoint": "outputs/experiments/aid_efc_t5_r34_eca_seed1993/model_checkpoints/model_0.pkl",
+  "method_state": "outputs/experiments/aid_efc_t5_r34_eca_seed1993/model_checkpoints/method_state_0.pkl",
+  "saved_at": "2026-10-29T08:06:28.176764"
+}

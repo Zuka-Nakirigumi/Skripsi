@@ -1,0 +1,1210 @@
+{
+  "run_id": "aid_fecam_t10_r34_eca_seed1993",
+  "mode": "experiment",
+  "tasks_completed": 10,
+  "total_runtime_seconds": 7808.939323231578,
+  "total_runtime_minutes": 130.1489887205263,
+  "task_results": [
+    {
+      "task_id": 0,
+      "seen_classes": 12,
+      "train_seconds": 7593.082247240469,
+      "eval_seconds": 8.71085474640131,
+      "after_task_seconds": 0.1883629858493805,
+      "runtime_seconds": 7601.981467846781,
+      "runtime_minutes": 126.69969113077968,
+      "peak_vram_allocated_gb": 16.675280570983887,
+      "peak_vram_reserved_gb": 23.2734375,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 97.51,
+            "00-09": 97.44,
+            "10-19": 97.86,
+            "old": 0,
+            "new": 97.51
+          },
+          "top1": 97.51,
+          "top5": 100.0
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 97.51,
+            "00-09": 97.44,
+            "10-19": 97.86,
+            "old": 0,
+            "new": 97.51
+          },
+          "top1": 97.51,
+          "top5": 100.0
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 97.5130890052356,
+      "macro_f1": 97.32170752721807,
+      "task_accuracy": [
+        97.5130890052356,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 1,
+      "seen_classes": 14,
+      "train_seconds": 9.956241674721241,
+      "eval_seconds": 10.223445462062955,
+      "after_task_seconds": 0.22242903523147106,
+      "runtime_seconds": 20.40211982652545,
+      "runtime_minutes": 0.34003533044209083,
+      "peak_vram_allocated_gb": 3.17948579788208,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 89.5,
+            "00-09": 94.07,
+            "10-19": 79.66,
+            "old": 94.76,
+            "new": 62.67
+          },
+          "top1": 89.5,
+          "top5": 99.89
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 83.37,
+            "00-09": 84.94,
+            "10-19": 80.0,
+            "old": 86.78,
+            "new": 66.0
+          },
+          "top1": 83.37,
+          "top5": 99.89
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 89.49671772428884,
+      "macro_f1": 89.43610660911469,
+      "task_accuracy": [
+        94.76439790575915,
+        62.66666666666667,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 2,
+      "seen_classes": 16,
+      "train_seconds": 8.231138909235597,
+      "eval_seconds": 10.527443198487163,
+      "after_task_seconds": 0.2299633864313364,
+      "runtime_seconds": 18.988551151007414,
+      "runtime_minutes": 0.3164758525167902,
+      "peak_vram_allocated_gb": 3.1794939041137695,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 86.02,
+            "00-09": 92.79,
+            "10-19": 75.26,
+            "old": 87.86,
+            "new": 69.61
+          },
+          "top1": 86.02,
+          "top5": 99.61
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 73.13,
+            "00-09": 73.72,
+            "10-19": 72.19,
+            "old": 73.19,
+            "new": 72.55
+          },
+          "top1": 73.13,
+          "top5": 98.52
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 86.0236220472441,
+      "macro_f1": 85.49163500200085,
+      "task_accuracy": [
+        93.717277486911,
+        57.99999999999999,
+        69.6078431372549,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 3,
+      "seen_classes": 18,
+      "train_seconds": 9.417907057330012,
+      "eval_seconds": 11.56770863942802,
+      "after_task_seconds": 0.2351138312369585,
+      "runtime_seconds": 21.220732662826777,
+      "runtime_minutes": 0.3536788777137796,
+      "peak_vram_allocated_gb": 3.179502010345459,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 82.55,
+            "00-09": 91.51,
+            "10-19": 71.84,
+            "old": 83.66,
+            "new": 73.85
+          },
+          "top1": 82.55,
+          "top5": 97.99
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 68.24,
+            "00-09": 71.47,
+            "10-19": 64.37,
+            "old": 70.37,
+            "new": 51.54
+          },
+          "top1": 68.24,
+          "top5": 94.24
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 82.54799301919721,
+      "macro_f1": 82.04413432427623,
+      "task_accuracy": [
+        92.67015706806284,
+        48.66666666666667,
+        67.64705882352942,
+        73.84615384615385,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 4,
+      "seen_classes": 20,
+      "train_seconds": 9.304978286847472,
+      "eval_seconds": 12.308006269857287,
+      "after_task_seconds": 0.27301837131381035,
+      "runtime_seconds": 21.886006312444806,
+      "runtime_minutes": 0.3647667718740801,
+      "peak_vram_allocated_gb": 3.1795101165771484,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 77.48,
+            "00-09": 89.74,
+            "10-19": 66.02,
+            "old": 81.24,
+            "new": 47.95
+          },
+          "top1": 77.48,
+          "top5": 97.52
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 59.91,
+            "00-09": 57.85,
+            "10-19": 61.83,
+            "old": 59.69,
+            "new": 61.64
+          },
+          "top1": 59.91,
+          "top5": 93.19
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 77.47678018575851,
+      "macro_f1": 76.83964422774096,
+      "task_accuracy": [
+        91.2303664921466,
+        48.66666666666667,
+        67.64705882352942,
+        70.76923076923077,
+        47.94520547945205,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 5,
+      "seen_classes": 22,
+      "train_seconds": 9.116950700059533,
+      "eval_seconds": 13.514371763914824,
+      "after_task_seconds": 0.3148374557495117,
+      "runtime_seconds": 22.946162924170494,
+      "runtime_minutes": 0.3824360487361749,
+      "peak_vram_allocated_gb": 3.179518222808838,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 73.96,
+            "00-09": 89.1,
+            "10-19": 64.07,
+            "20-29": 54.17,
+            "old": 76.16,
+            "new": 54.17
+          },
+          "top1": 73.96,
+          "top5": 97.21
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 56.13,
+            "00-09": 56.73,
+            "10-19": 58.23,
+            "20-29": 43.75,
+            "old": 57.51,
+            "new": 43.75
+          },
+          "top1": 56.13,
+          "top5": 91.64
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 73.95543175487465,
+      "macro_f1": 73.33074501368988,
+      "task_accuracy": [
+        90.70680628272252,
+        46.0,
+        67.64705882352942,
+        70.76923076923077,
+        41.78082191780822,
+        54.166666666666664,
+        null,
+        null,
+        null,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 6,
+      "seen_classes": 24,
+      "train_seconds": 8.820230692625046,
+      "eval_seconds": 14.343455726280808,
+      "after_task_seconds": 0.31509858928620815,
+      "runtime_seconds": 23.478788871318102,
+      "runtime_minutes": 0.3913131478553017,
+      "peak_vram_allocated_gb": 3.1795263290405273,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 73.37,
+            "00-09": 89.1,
+            "10-19": 64.07,
+            "20-29": 60.22,
+            "old": 73.89,
+            "new": 67.69
+          },
+          "top1": 73.37,
+          "top5": 96.74
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 51.98,
+            "00-09": 45.83,
+            "10-19": 57.63,
+            "20-29": 52.19,
+            "old": 50.49,
+            "new": 68.46
+          },
+          "top1": 51.98,
+          "top5": 91.19
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 73.37164750957854,
+      "macro_f1": 72.83859781847889,
+      "task_accuracy": [
+        90.70680628272252,
+        46.0,
+        67.64705882352942,
+        70.76923076923077,
+        41.78082191780822,
+        53.47222222222222,
+        67.6923076923077,
+        null,
+        null,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 7,
+      "seen_classes": 26,
+      "train_seconds": 9.45308517664671,
+      "eval_seconds": 15.098308151587844,
+      "after_task_seconds": 0.35825493931770325,
+      "runtime_seconds": 24.90965210646391,
+      "runtime_minutes": 0.41516086844106515,
+      "peak_vram_allocated_gb": 3.179534435272217,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 71.68,
+            "00-09": 89.1,
+            "10-19": 62.57,
+            "20-29": 60.38,
+            "old": 72.67,
+            "new": 61.33
+          },
+          "top1": 71.68,
+          "top5": 95.69
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 49.94,
+            "00-09": 45.67,
+            "10-19": 55.54,
+            "20-29": 47.41,
+            "old": 50.83,
+            "new": 40.67
+          },
+          "top1": 49.94,
+          "top5": 89.98
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 71.67832167832168,
+      "macro_f1": 71.23542032442703,
+      "task_accuracy": [
+        90.57591623036649,
+        45.33333333333333,
+        66.66666666666666,
+        65.38461538461539,
+        41.78082191780822,
+        52.77777777777778,
+        67.6923076923077,
+        61.33333333333333,
+        null,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 8,
+      "seen_classes": 28,
+      "train_seconds": 10.048887494951487,
+      "eval_seconds": 16.115714754909277,
+      "after_task_seconds": 0.35479445196688175,
+      "runtime_seconds": 26.51940039731562,
+      "runtime_minutes": 0.441990006621927,
+      "peak_vram_allocated_gb": 3.1795425415039062,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 70.55,
+            "00-09": 88.62,
+            "10-19": 61.98,
+            "20-29": 61.09,
+            "old": 71.1,
+            "new": 64.81
+          },
+          "top1": 70.55,
+          "top5": 95.1
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 48.88,
+            "00-09": 43.59,
+            "10-19": 53.29,
+            "20-29": 49.49,
+            "old": 48.08,
+            "new": 57.41
+          },
+          "top1": 48.88,
+          "top5": 89.08
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 70.55378061767838,
+      "macro_f1": 70.13058598832035,
+      "task_accuracy": [
+        90.18324607329843,
+        44.666666666666664,
+        65.68627450980392,
+        63.84615384615384,
+        41.78082191780822,
+        52.083333333333336,
+        67.6923076923077,
+        60.0,
+        64.81481481481481,
+        null
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    },
+    {
+      "task_id": 9,
+      "seen_classes": 30,
+      "train_seconds": 9.099733158946037,
+      "eval_seconds": 16.891207676380873,
+      "after_task_seconds": 0.3932242691516876,
+      "runtime_seconds": 26.384168099611998,
+      "runtime_minutes": 0.4397361349935333,
+      "peak_vram_allocated_gb": 3.1795506477355957,
+      "peak_vram_reserved_gb": 4.36328125,
+      "primary": {
+        "name": "fecam_mahalanobis",
+        "metrics": {
+          "grouped": {
+            "total": 70.8,
+            "00-09": 88.46,
+            "10-19": 61.38,
+            "20-29": 64.12,
+            "old": 69.81,
+            "new": 86.07
+          },
+          "top1": 70.8,
+          "top5": 95.15
+        },
+        "cnn_diagnostic": {
+          "grouped": {
+            "total": 48.1,
+            "00-09": 43.59,
+            "10-19": 49.85,
+            "20-29": 50.42,
+            "old": 46.81,
+            "new": 68.03
+          },
+          "top1": 48.1,
+          "top5": 89.1
+        }
+      },
+      "canonical_classifier": "fecam_mahalanobis",
+      "canonical_top1": 70.8,
+      "macro_f1": 70.3643446901085,
+      "task_accuracy": [
+        89.92146596858639,
+        44.666666666666664,
+        63.725490196078425,
+        63.07692307692307,
+        41.78082191780822,
+        52.083333333333336,
+        60.76923076923077,
+        60.0,
+        64.81481481481481,
+        86.0655737704918
+      ],
+      "evaluation_role": {
+        "primary": [
+          "aia",
+          "last_task_accuracy"
+        ],
+        "supporting": [
+          "macro_f1_final",
+          "forgetting_rate",
+          "bwt"
+        ],
+        "cross_run": [
+          "delta_aia",
+          "mean_delta_aia",
+          "delta_lta",
+          "delta_macro_f1",
+          "attention_win_rate"
+        ]
+      }
+    }
+  ],
+  "device": "NVIDIA RTX A5000",
+  "continual_metrics": {
+    "aia": 79.34173835421775,
+    "last_task_accuracy": 70.8,
+    "forgetting_rate": 6.683400853343725,
+    "bwt": -6.527481544271543,
+    "fwt": null,
+    "fwt_status": "not_applicable_under_dynamic_classifier_cil_protocol",
+    "macro_f1_final": 70.3643446901085,
+    "macro_f1_history": [
+      97.32170752721807,
+      89.43610660911469,
+      85.49163500200085,
+      82.04413432427623,
+      76.83964422774096,
+      73.33074501368988,
+      72.83859781847889,
+      71.23542032442703,
+      70.13058598832035,
+      70.3643446901085
+    ],
+    "joint_top1_history": [
+      97.5130890052356,
+      89.49671772428884,
+      86.0236220472441,
+      82.54799301919721,
+      77.47678018575851,
+      73.95543175487465,
+      73.37164750957854,
+      71.67832167832168,
+      70.55378061767838,
+      70.8
+    ],
+    "task_accuracy_matrix": [
+      [
+        97.5130890052356,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        94.76439790575915,
+        62.66666666666667,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        93.717277486911,
+        57.99999999999999,
+        69.6078431372549,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        92.67015706806284,
+        48.66666666666667,
+        67.64705882352942,
+        73.84615384615385,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        91.2303664921466,
+        48.66666666666667,
+        67.64705882352942,
+        70.76923076923077,
+        47.94520547945205,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        90.70680628272252,
+        46.0,
+        67.64705882352942,
+        70.76923076923077,
+        41.78082191780822,
+        54.166666666666664,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        90.70680628272252,
+        46.0,
+        67.64705882352942,
+        70.76923076923077,
+        41.78082191780822,
+        53.47222222222222,
+        67.6923076923077,
+        null,
+        null,
+        null
+      ],
+      [
+        90.57591623036649,
+        45.33333333333333,
+        66.66666666666666,
+        65.38461538461539,
+        41.78082191780822,
+        52.77777777777778,
+        67.6923076923077,
+        61.33333333333333,
+        null,
+        null
+      ],
+      [
+        90.18324607329843,
+        44.666666666666664,
+        65.68627450980392,
+        63.84615384615384,
+        41.78082191780822,
+        52.083333333333336,
+        67.6923076923077,
+        60.0,
+        64.81481481481481,
+        null
+      ],
+      [
+        89.92146596858639,
+        44.666666666666664,
+        63.725490196078425,
+        63.07692307692307,
+        41.78082191780822,
+        52.083333333333336,
+        60.76923076923077,
+        60.0,
+        64.81481481481481,
+        86.0655737704918
+      ]
+    ],
+    "class_accuracy_matrix": [
+      [
+        98.27586206896551,
+        92.3076923076923,
+        95.45454545454545,
+        90.9090909090909,
+        97.5609756097561,
+        100.0,
+        98.64864864864865,
+        100.0,
+        98.52941176470588,
+        100.0,
+        96.55172413793103,
+        98.78048780487805,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        98.27586206896551,
+        71.15384615384616,
+        90.9090909090909,
+        88.63636363636364,
+        96.34146341463415,
+        100.0,
+        97.2972972972973,
+        97.91666666666666,
+        94.11764705882352,
+        100.0,
+        96.55172413793103,
+        98.78048780487805,
+        58.97435897435898,
+        66.66666666666666,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        94.82758620689656,
+        71.15384615384616,
+        83.33333333333334,
+        88.63636363636364,
+        96.34146341463415,
+        100.0,
+        97.2972972972973,
+        97.91666666666666,
+        92.64705882352942,
+        100.0,
+        96.55172413793103,
+        98.78048780487805,
+        57.692307692307686,
+        58.333333333333336,
+        64.0,
+        75.0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        94.82758620689656,
+        71.15384615384616,
+        78.78787878787878,
+        88.63636363636364,
+        96.34146341463415,
+        100.0,
+        93.24324324324324,
+        95.83333333333334,
+        92.64705882352942,
+        98.68421052631578,
+        96.55172413793103,
+        98.78048780487805,
+        50.0,
+        47.22222222222222,
+        64.0,
+        71.15384615384616,
+        75.0,
+        72.41379310344827,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        91.37931034482759,
+        71.15384615384616,
+        78.78787878787878,
+        84.0909090909091,
+        96.34146341463415,
+        98.21428571428571,
+        91.8918918918919,
+        95.83333333333334,
+        92.64705882352942,
+        92.10526315789474,
+        96.55172413793103,
+        98.78048780487805,
+        50.0,
+        47.22222222222222,
+        64.0,
+        71.15384615384616,
+        73.61111111111111,
+        67.24137931034483,
+        62.16216216216216,
+        33.33333333333333,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        91.37931034482759,
+        71.15384615384616,
+        78.78787878787878,
+        81.81818181818183,
+        93.90243902439023,
+        98.21428571428571,
+        90.54054054054053,
+        95.83333333333334,
+        92.64705882352942,
+        92.10526315789474,
+        96.55172413793103,
+        98.78048780487805,
+        46.15384615384615,
+        45.83333333333333,
+        64.0,
+        71.15384615384616,
+        73.61111111111111,
+        67.24137931034483,
+        56.75675675675676,
+        26.38888888888889,
+        58.333333333333336,
+        48.333333333333336,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        91.37931034482759,
+        71.15384615384616,
+        78.78787878787878,
+        81.81818181818183,
+        93.90243902439023,
+        98.21428571428571,
+        90.54054054054053,
+        95.83333333333334,
+        92.64705882352942,
+        92.10526315789474,
+        96.55172413793103,
+        98.78048780487805,
+        46.15384615384615,
+        45.83333333333333,
+        64.0,
+        71.15384615384616,
+        73.61111111111111,
+        67.24137931034483,
+        56.75675675675676,
+        26.38888888888889,
+        58.333333333333336,
+        46.666666666666664,
+        83.33333333333334,
+        54.285714285714285,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        91.37931034482759,
+        71.15384615384616,
+        78.78787878787878,
+        81.81818181818183,
+        93.90243902439023,
+        98.21428571428571,
+        90.54054054054053,
+        95.83333333333334,
+        92.64705882352942,
+        92.10526315789474,
+        96.55172413793103,
+        97.5609756097561,
+        44.871794871794876,
+        45.83333333333333,
+        62.0,
+        71.15384615384616,
+        70.83333333333334,
+        58.620689655172406,
+        56.75675675675676,
+        26.38888888888889,
+        57.14285714285714,
+        46.666666666666664,
+        83.33333333333334,
+        54.285714285714285,
+        51.42857142857142,
+        70.0,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        91.37931034482759,
+        69.23076923076923,
+        75.75757575757575,
+        81.81818181818183,
+        93.90243902439023,
+        98.21428571428571,
+        90.54054054054053,
+        95.83333333333334,
+        92.64705882352942,
+        92.10526315789474,
+        96.55172413793103,
+        97.5609756097561,
+        44.871794871794876,
+        44.44444444444444,
+        60.0,
+        71.15384615384616,
+        68.05555555555556,
+        58.620689655172406,
+        56.75675675675676,
+        26.38888888888889,
+        57.14285714285714,
+        45.0,
+        83.33333333333334,
+        54.285714285714285,
+        48.57142857142857,
+        70.0,
+        44.047619047619044,
+        87.17948717948718,
+        null,
+        null
+      ],
+      [
+        91.37931034482759,
+        69.23076923076923,
+        75.75757575757575,
+        79.54545454545455,
+        93.90243902439023,
+        98.21428571428571,
+        90.54054054054053,
+        95.83333333333334,
+        92.64705882352942,
+        92.10526315789474,
+        94.82758620689656,
+        97.5609756097561,
+        44.871794871794876,
+        44.44444444444444,
+        56.00000000000001,
+        71.15384615384616,
+        66.66666666666666,
+        58.620689655172406,
+        56.75675675675676,
+        26.38888888888889,
+        57.14285714285714,
+        45.0,
+        68.33333333333333,
+        54.285714285714285,
+        48.57142857142857,
+        70.0,
+        44.047619047619044,
+        87.17948717948718,
+        95.0,
+        77.41935483870968
+      ]
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ],
+      "efficiency": [
+        "runtime",
+        "peak_vram",
+        "parameter_count"
+      ]
+    }
+  }
+}

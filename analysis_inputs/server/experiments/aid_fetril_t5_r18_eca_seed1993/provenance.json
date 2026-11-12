@@ -1,0 +1,31 @@
+{
+  "run_id": "aid_fetril_t5_r18_eca_seed1993",
+  "dataset": "aid",
+  "method": "fetril",
+  "backbone": "r18",
+  "attention": "eca",
+  "training_seed": 1993,
+  "batch_size": 32,
+  "model_parameters_pre_task0": {
+    "total": 11176548,
+    "trainable": 11176548
+  },
+  "python_version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+  "platform": "Linux-5.15.0-179-generic-x86_64-with-glibc2.35",
+  "torch_version": "2.6.0+cu124",
+  "cuda_runtime": "12.4",
+  "numpy_version": "1.26.4",
+  "device_index": 1,
+  "device_name": "NVIDIA RTX A5000",
+  "device_total_vram_gb": 23.672607421875,
+  "git_commit": "",
+  "git_dirty": false,
+  "git_status": "",
+  "method_reference": {
+    "method": "FeTrIL",
+    "classifier": "linear_svm",
+    "reference": "GregoirePetit/FeTrIL",
+    "reference_commit": "e3b139ce84a735a28f1fc0f93b7ab401721f6dad"
+  },
+  "generated_at": "2026-10-24T13:43:12.477075"
+}

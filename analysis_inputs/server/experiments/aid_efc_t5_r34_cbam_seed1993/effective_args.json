@@ -1,0 +1,40 @@
+{
+  "prefix": "thesis",
+  "dataset": "aid",
+  "model_name": "efc",
+  "convnet_type": "remote_resnet34",
+  "attention_type": "cbam",
+  "memory_size": 0,
+  "fixed_memory": false,
+  "shuffle": false,
+  "seed": 1993,
+  "device": [
+    "cuda:1"
+  ],
+  "num_workers": 8,
+  "dataset_root": "/home/jason/PyCIL/datasets/raw/AID",
+  "split_root": "/home/jason/PyCIL/splits/aid/seed_1993",
+  "task_config_path": "/home/jason/PyCIL/splits/aid/seed_1993/T5_tasks.json",
+  "normalization_mean": [
+    0.3975528437637017,
+    0.40895273597365867,
+    0.368011395457626
+  ],
+  "normalization_std": [
+    0.21716769319444088,
+    0.19427591916533118,
+    0.19169160576482103
+  ],
+  "epochs_first_task": 160,
+  "epochs_next_task": 100,
+  "efc_lamb": 10.0,
+  "efc_damping": 0.1,
+  "efc_protoupdate": 0.2,
+  "efc_protobatchsize": 64,
+  "batch_size": 12,
+  "save_checkpoints": true,
+  "checkpoint_dir": "outputs/experiments/aid_efc_t5_r34_cbam_seed1993/model_checkpoints",
+  "checkpoint_prefix": "outputs/experiments/aid_efc_t5_r34_cbam_seed1993/model_checkpoints/model",
+  "init_cls": 14,
+  "increment": 4
+}

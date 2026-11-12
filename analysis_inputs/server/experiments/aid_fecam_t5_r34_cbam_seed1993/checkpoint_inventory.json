@@ -1,0 +1,47 @@
+{
+  "source_machine": "server",
+  "generated_at": "2026-11-09T12:38:14",
+  "note": "Presence and file size checked on source only; content/loadability not verified.",
+  "inventory": {
+    "model_checkpoints/method_state_0.pkl": {
+      "exists": true,
+      "size": 88158945
+    },
+    "model_checkpoints/method_state_1.pkl": {
+      "exists": true,
+      "size": 113337785
+    },
+    "model_checkpoints/method_state_2.pkl": {
+      "exists": true,
+      "size": 138516625
+    },
+    "model_checkpoints/method_state_3.pkl": {
+      "exists": true,
+      "size": 163695465
+    },
+    "model_checkpoints/method_state_4.pkl": {
+      "exists": true,
+      "size": 188874305
+    },
+    "model_checkpoints/model_0.pkl": {
+      "exists": true,
+      "size": 86005374
+    },
+    "model_checkpoints/model_1.pkl": {
+      "exists": true,
+      "size": 86013884
+    },
+    "model_checkpoints/model_2.pkl": {
+      "exists": true,
+      "size": 86022076
+    },
+    "model_checkpoints/model_3.pkl": {
+      "exists": true,
+      "size": 86030268
+    },
+    "model_checkpoints/model_4.pkl": {
+      "exists": true,
+      "size": 86038460
+    }
+  }
+}

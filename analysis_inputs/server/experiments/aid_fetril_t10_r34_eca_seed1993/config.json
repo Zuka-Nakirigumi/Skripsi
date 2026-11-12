@@ -1,0 +1,73 @@
+{
+  "run_id": "aid_fetril_t10_r34_eca_seed1993",
+  "dataset": "aid",
+  "method": "fetril",
+  "protocol": "T10",
+  "backbone": "r34",
+  "attention": "eca",
+  "training_seed": 1993,
+  "dataset_config": {
+    "dataset": "aid",
+    "display_name": "AID",
+    "num_classes": 30,
+    "input_size": 600,
+    "dataset_root": "datasets/raw/AID",
+    "split_root": "splits/aid/seed_1993",
+    "train_manifest": "splits/aid/seed_1993/train.csv",
+    "test_manifest": "splits/aid/seed_1993/test.csv",
+    "task_configs": {
+      "T5": "splits/aid/seed_1993/T5_tasks.json",
+      "T10": "splits/aid/seed_1993/T10_tasks.json"
+    },
+    "expected_train_images": 8000,
+    "expected_test_images": 2000,
+    "normalization": {
+      "source": "train_split_only",
+      "mean": [
+        0.3975528437637017,
+        0.40895273597365867,
+        0.368011395457626
+      ],
+      "std": [
+        0.21716769319444088,
+        0.19427591916533118,
+        0.19169160576482103
+      ]
+    },
+    "train_transform": {
+      "random_crop": 600,
+      "padding": 4,
+      "padding_mode": "reflect",
+      "horizontal_flip": 0.5
+    },
+    "sampler": {
+      "type": "weighted_inverse_frequency",
+      "replacement": true,
+      "num_samples": "dataset_length"
+    },
+    "_config_path": "/home/jason/PyCIL/configs/datasets/aid.json"
+  },
+  "method_config": {
+    "_meta": {
+      "method": "FeTrIL",
+      "classifier": "linear_svm",
+      "reference": "GregoirePetit/FeTrIL",
+      "reference_commit": "e3b139ce84a735a28f1fc0f93b7ab401721f6dad"
+    },
+    "model_name": "fetril",
+    "init_epochs": 160,
+    "init_lr": 0.1,
+    "init_weight_decay": 0.0005,
+    "classifier": "svm",
+    "svm_c": 1.0,
+    "svm_tol": 0.0001,
+    "batch_size": 32,
+    "_config_path": "/home/jason/PyCIL/configs/methods/fetril.json"
+  },
+  "resolved_paths": {
+    "dataset_root": "/home/jason/PyCIL/datasets/raw/AID",
+    "train_manifest": "/home/jason/PyCIL/splits/aid/seed_1993/train.csv",
+    "test_manifest": "/home/jason/PyCIL/splits/aid/seed_1993/test.csv",
+    "task_config": "/home/jason/PyCIL/splits/aid/seed_1993/T10_tasks.json"
+  }
+}

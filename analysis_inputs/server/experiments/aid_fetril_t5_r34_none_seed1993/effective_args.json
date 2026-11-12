@@ -1,0 +1,40 @@
+{
+  "prefix": "thesis",
+  "dataset": "aid",
+  "model_name": "fetril",
+  "convnet_type": "remote_resnet34",
+  "attention_type": "none",
+  "memory_size": 0,
+  "fixed_memory": false,
+  "shuffle": false,
+  "seed": 1993,
+  "device": [
+    "cuda:1"
+  ],
+  "num_workers": 8,
+  "dataset_root": "/home/jason/PyCIL/datasets/raw/AID",
+  "split_root": "/home/jason/PyCIL/splits/aid/seed_1993",
+  "task_config_path": "/home/jason/PyCIL/splits/aid/seed_1993/T5_tasks.json",
+  "normalization_mean": [
+    0.3975528437637017,
+    0.40895273597365867,
+    0.368011395457626
+  ],
+  "normalization_std": [
+    0.21716769319444088,
+    0.19427591916533118,
+    0.19169160576482103
+  ],
+  "init_epochs": 160,
+  "init_lr": 0.1,
+  "init_weight_decay": 0.0005,
+  "classifier": "svm",
+  "svm_c": 1.0,
+  "svm_tol": 0.0001,
+  "batch_size": 32,
+  "save_checkpoints": true,
+  "checkpoint_dir": "outputs/experiments/aid_fetril_t5_r34_none_seed1993/model_checkpoints",
+  "checkpoint_prefix": "outputs/experiments/aid_fetril_t5_r34_none_seed1993/model_checkpoints/model",
+  "init_cls": 14,
+  "increment": 4
+}

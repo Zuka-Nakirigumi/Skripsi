@@ -1,0 +1,42 @@
+{
+  "prefix": "thesis",
+  "dataset": "aid",
+  "model_name": "pass",
+  "convnet_type": "remote_resnet34",
+  "attention_type": "procbam",
+  "memory_size": 0,
+  "fixed_memory": false,
+  "shuffle": false,
+  "seed": 1993,
+  "device": [
+    "cuda:1"
+  ],
+  "num_workers": 8,
+  "dataset_root": "/home/jason/PyCIL/datasets/raw/AID",
+  "split_root": "/home/jason/PyCIL/splits/aid/seed_1993",
+  "task_config_path": "/home/jason/PyCIL/splits/aid/seed_1993/T10_tasks.json",
+  "normalization_mean": [
+    0.3975528437637017,
+    0.40895273597365867,
+    0.368011395457626
+  ],
+  "normalization_std": [
+    0.21716769319444088,
+    0.19427591916533118,
+    0.19169160576482103
+  ],
+  "epochs": 100,
+  "lr": 0.001,
+  "weight_decay": 0.0002,
+  "step_size": 45,
+  "gamma": 0.1,
+  "lambda_fkd": 10.0,
+  "lambda_proto": 10.0,
+  "temp": 0.1,
+  "batch_size": 12,
+  "save_checkpoints": true,
+  "checkpoint_dir": "outputs/experiments/aid_pass_t10_r34_procbam_seed1993/model_checkpoints",
+  "checkpoint_prefix": "outputs/experiments/aid_pass_t10_r34_procbam_seed1993/model_checkpoints/model",
+  "init_cls": 12,
+  "increment": 2
+}

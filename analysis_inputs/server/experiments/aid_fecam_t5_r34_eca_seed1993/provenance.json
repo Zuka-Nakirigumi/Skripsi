@@ -1,0 +1,30 @@
+{
+  "run_id": "aid_fecam_t5_r34_eca_seed1993",
+  "dataset": "aid",
+  "method": "fecam",
+  "backbone": "r34",
+  "attention": "eca",
+  "training_seed": 1993,
+  "batch_size": 64,
+  "model_parameters_pre_task0": {
+    "total": 21284746,
+    "trainable": 21284746
+  },
+  "python_version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+  "platform": "Linux-5.15.0-179-generic-x86_64-with-glibc2.35",
+  "torch_version": "2.6.0+cu124",
+  "cuda_runtime": "12.4",
+  "numpy_version": "1.26.4",
+  "device_index": 1,
+  "device_name": "NVIDIA RTX A5000",
+  "device_total_vram_gb": 23.672607421875,
+  "git_commit": "",
+  "git_dirty": false,
+  "git_status": "",
+  "method_reference": {
+    "method": "FeCAM",
+    "reference": "dipamgoswami/FeCAM",
+    "reference_commit": "e33f39d112ff2d2a2df2e68c490af579a50edd31"
+  },
+  "generated_at": "2026-11-01T16:44:10.754465"
+}

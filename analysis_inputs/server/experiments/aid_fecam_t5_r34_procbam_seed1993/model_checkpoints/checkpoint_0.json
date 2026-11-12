@@ -1,0 +1,6 @@
+{
+  "task_id": 0,
+  "network_checkpoint": "outputs/experiments/aid_fecam_t5_r34_procbam_seed1993/model_checkpoints/model_0.pkl",
+  "method_state": "outputs/experiments/aid_fecam_t5_r34_procbam_seed1993/model_checkpoints/method_state_0.pkl",
+  "saved_at": "2026-11-02T01:53:19.325740"
+}

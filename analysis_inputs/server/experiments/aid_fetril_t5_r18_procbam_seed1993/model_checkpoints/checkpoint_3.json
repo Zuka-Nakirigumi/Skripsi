@@ -1,0 +1,6 @@
+{
+  "task_id": 3,
+  "network_checkpoint": "outputs/experiments/aid_fetril_t5_r18_procbam_seed1993/model_checkpoints/model_3.pkl",
+  "method_state": "outputs/experiments/aid_fetril_t5_r18_procbam_seed1993/model_checkpoints/method_state_3.pkl",
+  "saved_at": "2026-10-24T17:51:45.953738"
+}

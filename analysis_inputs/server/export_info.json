@@ -1,0 +1,289 @@
+{
+  "source_machine": "server",
+  "export_time": "2026-11-09T12:38:15",
+  "source_directory": "/home/jason/PyCIL/outputs/experiments",
+  "include_incomplete": false,
+  "runs": [
+    {
+      "run_id": "aid_efc_t10_r18_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_efc_t10_r18_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_efc_t10_r18_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_efc_t10_r18_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_efc_t10_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_efc_t10_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_efc_t10_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_efc_t10_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_efc_t5_r18_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_efc_t5_r18_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_efc_t5_r18_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_efc_t5_r18_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_efc_t5_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_efc_t5_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_efc_t5_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_efc_t5_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fecam_t10_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fecam_t10_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fecam_t10_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fecam_t10_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fecam_t5_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fecam_t5_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fecam_t5_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fecam_t5_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fetril_t10_r18_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fetril_t10_r18_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fetril_t10_r18_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fetril_t10_r18_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fetril_t10_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fetril_t10_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fetril_t10_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fetril_t10_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_fetril_t5_r18_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fetril_t5_r18_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fetril_t5_r18_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fetril_t5_r18_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fetril_t5_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fetril_t5_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fetril_t5_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_fetril_t5_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_pass_t10_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_pass_t10_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_pass_t10_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_pass_t10_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_pass_t5_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_pass_t5_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_pass_t5_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_pass_t5_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_ssre_t10_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_ssre_t10_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_ssre_t10_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_ssre_t10_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 38
+    },
+    {
+      "run_id": "aid_ssre_t5_r34_cbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_ssre_t5_r34_eca_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_ssre_t5_r34_none_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    },
+    {
+      "run_id": "aid_ssre_t5_r34_procbam_seed1993",
+      "state_at_export": "completed",
+      "file_count": 23
+    }
+  ],
+  "notes": "No model weights included. Checkpoint inventory is not torch.load verification."
+}

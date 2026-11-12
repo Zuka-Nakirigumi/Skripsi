@@ -1,0 +1,275 @@
+[
+  {
+    "task_id": 0,
+    "seen_classes": 14,
+    "train_seconds": 13331.387765489519,
+    "eval_seconds": 3.0744935013353825,
+    "after_task_seconds": 0.11661080084741116,
+    "runtime_seconds": 13334.578872554004,
+    "runtime_minutes": 222.2429812092334,
+    "peak_vram_allocated_gb": 7.713589668273926,
+    "peak_vram_reserved_gb": 13.92578125,
+    "primary": {
+      "name": "cnn",
+      "metrics": {
+        "grouped": {
+          "total": 97.16,
+          "00-09": 97.12,
+          "10-19": 97.24,
+          "old": 0,
+          "new": 97.16
+        },
+        "top1": 97.16,
+        "top5": 100.0
+      },
+      "secondary_diagnostic": null
+    },
+    "canonical_classifier": "cnn",
+    "canonical_top1": 97.15536105032822,
+    "macro_f1": 97.05054596875601,
+    "task_accuracy": [
+      97.15536105032822,
+      null,
+      null,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 1,
+    "seen_classes": 18,
+    "train_seconds": 1134.5170078407973,
+    "eval_seconds": 3.9363963454961777,
+    "after_task_seconds": 0.11355378478765488,
+    "runtime_seconds": 1138.5669607929885,
+    "runtime_minutes": 18.976116013216476,
+    "peak_vram_allocated_gb": 2.735924243927002,
+    "peak_vram_reserved_gb": 4.333984375,
+    "primary": {
+      "name": "cnn",
+      "metrics": {
+        "grouped": {
+          "total": 73.56,
+          "00-09": 65.38,
+          "10-19": 83.33,
+          "old": 68.27,
+          "new": 94.4
+        },
+        "top1": 73.56,
+        "top5": 99.21
+      },
+      "secondary_diagnostic": null
+    },
+    "canonical_classifier": "cnn",
+    "canonical_top1": 73.56020942408377,
+    "macro_f1": 74.07816949296742,
+    "task_accuracy": [
+      68.27133479212254,
+      94.39655172413794,
+      null,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 2,
+    "seen_classes": 22,
+    "train_seconds": 1371.140282034874,
+    "eval_seconds": 4.0391458831727505,
+    "after_task_seconds": 0.13759670034050941,
+    "runtime_seconds": 1375.3170279115438,
+    "runtime_minutes": 22.9219504651924,
+    "peak_vram_allocated_gb": 2.735398769378662,
+    "peak_vram_reserved_gb": 7.02734375,
+    "primary": {
+      "name": "cnn",
+      "metrics": {
+        "grouped": {
+          "total": 71.17,
+          "00-09": 59.13,
+          "10-19": 78.89,
+          "20-29": 87.5,
+          "old": 66.06,
+          "new": 91.38
+        },
+        "top1": 71.17,
+        "top5": 97.91
+      },
+      "secondary_diagnostic": null
+    },
+    "canonical_classifier": "cnn",
+    "canonical_top1": 71.1699164345404,
+    "macro_f1": 71.32801762862186,
+    "task_accuracy": [
+      62.144420131291035,
+      81.46551724137932,
+      91.37931034482759,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 3,
+    "seen_classes": 26,
+    "train_seconds": 1318.3052500654012,
+    "eval_seconds": 5.786880314350128,
+    "after_task_seconds": 0.15441318228840828,
+    "runtime_seconds": 1324.2465470172465,
+    "runtime_minutes": 22.070775783620775,
+    "peak_vram_allocated_gb": 2.735428810119629,
+    "peak_vram_reserved_gb": 7.03125,
+    "primary": {
+      "name": "cnn",
+      "metrics": {
+        "grouped": {
+          "total": 71.15,
+          "00-09": 57.05,
+          "10-19": 76.8,
+          "20-29": 83.02,
+          "old": 67.69,
+          "new": 88.93
+        },
+        "top1": 71.15,
+        "top5": 96.45
+      },
+      "secondary_diagnostic": null
+    },
+    "canonical_classifier": "cnn",
+    "canonical_top1": 71.15384615384616,
+    "macro_f1": 71.22116620160448,
+    "task_accuracy": [
+      61.816192560175054,
+      75.86206896551724,
+      79.65517241379311,
+      88.92857142857142,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 4,
+    "seen_classes": 30,
+    "train_seconds": 1315.801893595606,
+    "eval_seconds": 5.5065223928540945,
+    "after_task_seconds": 0.1689574420452118,
+    "runtime_seconds": 1321.4773787669837,
+    "runtime_minutes": 22.024622979449727,
+    "peak_vram_allocated_gb": 2.7359848022460938,
+    "peak_vram_reserved_gb": 7.251953125,
+    "primary": {
+      "name": "cnn",
+      "metrics": {
+        "grouped": {
+          "total": 71.35,
+          "00-09": 53.85,
+          "10-19": 74.85,
+          "20-29": 83.47,
+          "old": 68.07,
+          "new": 91.2
+        },
+        "top1": 71.35,
+        "top5": 95.35
+      },
+      "secondary_diagnostic": null
+    },
+    "canonical_classifier": "cnn",
+    "canonical_top1": 71.35000000000001,
+    "macro_f1": 70.64255077450329,
+    "task_accuracy": [
+      58.86214442013129,
+      75.43103448275862,
+      78.96551724137932,
+      80.71428571428572,
+      91.19718309859155
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  }
+]

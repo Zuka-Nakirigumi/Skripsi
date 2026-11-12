@@ -1,0 +1,72 @@
+{
+  "run_id": "aid_efc_t5_r34_none_seed1993",
+  "dataset": "aid",
+  "method": "efc",
+  "protocol": "T5",
+  "backbone": "r34",
+  "attention": "none",
+  "training_seed": 1993,
+  "dataset_config": {
+    "dataset": "aid",
+    "display_name": "AID",
+    "num_classes": 30,
+    "input_size": 600,
+    "dataset_root": "datasets/raw/AID",
+    "split_root": "splits/aid/seed_1993",
+    "train_manifest": "splits/aid/seed_1993/train.csv",
+    "test_manifest": "splits/aid/seed_1993/test.csv",
+    "task_configs": {
+      "T5": "splits/aid/seed_1993/T5_tasks.json",
+      "T10": "splits/aid/seed_1993/T10_tasks.json"
+    },
+    "expected_train_images": 8000,
+    "expected_test_images": 2000,
+    "normalization": {
+      "source": "train_split_only",
+      "mean": [
+        0.3975528437637017,
+        0.40895273597365867,
+        0.368011395457626
+      ],
+      "std": [
+        0.21716769319444088,
+        0.19427591916533118,
+        0.19169160576482103
+      ]
+    },
+    "train_transform": {
+      "random_crop": 600,
+      "padding": 4,
+      "padding_mode": "reflect",
+      "horizontal_flip": 0.5
+    },
+    "sampler": {
+      "type": "weighted_inverse_frequency",
+      "replacement": true,
+      "num_samples": "dataset_length"
+    },
+    "_config_path": "/home/jason/PyCIL/configs/datasets/aid.json"
+  },
+  "method_config": {
+    "_meta": {
+      "method": "EFC",
+      "reference": "simomagi/elastic_feature_consolidation",
+      "reference_commit": "8c6b6eb66bfa2d3cee9353cd5533ff4713907e6f"
+    },
+    "model_name": "efc",
+    "epochs_first_task": 160,
+    "epochs_next_task": 100,
+    "efc_lamb": 10.0,
+    "efc_damping": 0.1,
+    "efc_protoupdate": 0.2,
+    "efc_protobatchsize": 64,
+    "batch_size": 12,
+    "_config_path": "/home/jason/PyCIL/configs/methods/efc.json"
+  },
+  "resolved_paths": {
+    "dataset_root": "/home/jason/PyCIL/datasets/raw/AID",
+    "train_manifest": "/home/jason/PyCIL/splits/aid/seed_1993/train.csv",
+    "test_manifest": "/home/jason/PyCIL/splits/aid/seed_1993/test.csv",
+    "task_config": "/home/jason/PyCIL/splits/aid/seed_1993/T5_tasks.json"
+  }
+}

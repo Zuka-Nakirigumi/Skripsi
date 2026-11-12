@@ -1,0 +1,275 @@
+[
+  {
+    "task_id": 0,
+    "seen_classes": 14,
+    "train_seconds": 9028.314630264416,
+    "eval_seconds": 0.02040519006550312,
+    "after_task_seconds": 0.15947410836815834,
+    "runtime_seconds": 9028.494512038305,
+    "runtime_minutes": 150.47490853397176,
+    "peak_vram_allocated_gb": 9.720537185668945,
+    "peak_vram_reserved_gb": 13.943359375,
+    "primary": {
+      "name": "fetril_svm",
+      "top1": 96.61,
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 96.61,
+          "00-09": 96.15,
+          "10-19": 97.59,
+          "old": 0,
+          "new": 96.61
+        },
+        "top1": 96.61,
+        "top5": 99.89
+      }
+    },
+    "canonical_classifier": "fetril_svm",
+    "canonical_top1": 96.60831509846827,
+    "macro_f1": 96.32098096491256,
+    "task_accuracy": [
+      96.60831509846827,
+      null,
+      null,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 1,
+    "seen_classes": 18,
+    "train_seconds": 36.26903273165226,
+    "eval_seconds": 0.010001379996538162,
+    "after_task_seconds": 0.16098476387560368,
+    "runtime_seconds": 36.440023524686694,
+    "runtime_minutes": 0.6073337254114449,
+    "peak_vram_allocated_gb": 1.6861777305603027,
+    "peak_vram_reserved_gb": 2.134765625,
+    "primary": {
+      "name": "fetril_svm",
+      "top1": 89.01,
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 89.01,
+          "00-09": 88.46,
+          "10-19": 89.66,
+          "old": 89.06,
+          "new": 88.79
+        },
+        "top1": 89.01,
+        "top5": 99.3
+      }
+    },
+    "canonical_classifier": "fetril_svm",
+    "canonical_top1": 89.00523560209425,
+    "macro_f1": 88.68431883058562,
+    "task_accuracy": [
+      89.05908096280088,
+      88.79310344827587,
+      null,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 2,
+    "seen_classes": 22,
+    "train_seconds": 43.67912753671408,
+    "eval_seconds": 0.011358899995684624,
+    "after_task_seconds": 0.16010775603353977,
+    "runtime_seconds": 43.850601743906736,
+    "runtime_minutes": 0.7308433623984456,
+    "peak_vram_allocated_gb": 1.686185359954834,
+    "peak_vram_reserved_gb": 2.134765625,
+    "primary": {
+      "name": "fetril_svm",
+      "top1": 83.7,
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 83.7,
+          "00-09": 86.7,
+          "10-19": 81.14,
+          "20-29": 82.64,
+          "old": 84.55,
+          "new": 80.34
+        },
+        "top1": 83.7,
+        "top5": 98.4
+      }
+    },
+    "canonical_classifier": "fetril_svm",
+    "canonical_top1": 83.70473537604457,
+    "macro_f1": 83.49137260319354,
+    "task_accuracy": [
+      87.19912472647702,
+      74.13793103448276,
+      80.3448275862069,
+      null,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 3,
+    "seen_classes": 26,
+    "train_seconds": 49.11623631231487,
+    "eval_seconds": 0.012779992073774338,
+    "after_task_seconds": 0.15523145534098148,
+    "runtime_seconds": 49.28425061143935,
+    "runtime_minutes": 0.8214041768573225,
+    "peak_vram_allocated_gb": 1.6861929893493652,
+    "peak_vram_reserved_gb": 2.134765625,
+    "primary": {
+      "name": "fetril_svm",
+      "top1": 81.59,
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 81.59,
+          "00-09": 85.9,
+          "10-19": 78.14,
+          "20-29": 80.66,
+          "old": 80.78,
+          "new": 85.71
+        },
+        "top1": 81.59,
+        "top5": 97.67
+      }
+    },
+    "canonical_classifier": "fetril_svm",
+    "canonical_top1": 81.58508158508158,
+    "macro_f1": 81.5936479100517,
+    "task_accuracy": [
+      86.10503282275711,
+      75.0,
+      68.62068965517241,
+      85.71428571428571,
+      null
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  },
+  {
+    "task_id": 4,
+    "seen_classes": 30,
+    "train_seconds": 55.0408187918365,
+    "eval_seconds": 0.01494167372584343,
+    "after_task_seconds": 0.16404292918741703,
+    "runtime_seconds": 55.2198060490191,
+    "runtime_minutes": 0.920330100816985,
+    "peak_vram_allocated_gb": 1.6862006187438965,
+    "peak_vram_reserved_gb": 2.134765625,
+    "primary": {
+      "name": "fetril_svm",
+      "top1": 78.5,
+      "cnn_diagnostic": {
+        "grouped": {
+          "total": 78.5,
+          "00-09": 83.81,
+          "10-19": 75.6,
+          "20-29": 76.55,
+          "old": 77.68,
+          "new": 83.45
+        },
+        "top1": 78.5,
+        "top5": 96.05
+      }
+    },
+    "canonical_classifier": "fetril_svm",
+    "canonical_top1": 78.5,
+    "macro_f1": 78.38299845525741,
+    "task_accuracy": [
+      84.9015317286652,
+      69.39655172413794,
+      64.13793103448275,
+      75.0,
+      83.45070422535211
+    ],
+    "evaluation_role": {
+      "primary": [
+        "aia",
+        "last_task_accuracy"
+      ],
+      "supporting": [
+        "macro_f1_final",
+        "forgetting_rate",
+        "bwt"
+      ],
+      "cross_run": [
+        "delta_aia",
+        "mean_delta_aia",
+        "delta_lta",
+        "delta_macro_f1",
+        "attention_win_rate"
+      ]
+    }
+  }
+]

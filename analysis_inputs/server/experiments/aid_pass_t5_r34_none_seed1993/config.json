@@ -1,0 +1,74 @@
+{
+  "run_id": "aid_pass_t5_r34_none_seed1993",
+  "dataset": "aid",
+  "method": "pass",
+  "protocol": "T5",
+  "backbone": "r34",
+  "attention": "none",
+  "training_seed": 1993,
+  "dataset_config": {
+    "dataset": "aid",
+    "display_name": "AID",
+    "num_classes": 30,
+    "input_size": 600,
+    "dataset_root": "datasets/raw/AID",
+    "split_root": "splits/aid/seed_1993",
+    "train_manifest": "splits/aid/seed_1993/train.csv",
+    "test_manifest": "splits/aid/seed_1993/test.csv",
+    "task_configs": {
+      "T5": "splits/aid/seed_1993/T5_tasks.json",
+      "T10": "splits/aid/seed_1993/T10_tasks.json"
+    },
+    "expected_train_images": 8000,
+    "expected_test_images": 2000,
+    "normalization": {
+      "source": "train_split_only",
+      "mean": [
+        0.3975528437637017,
+        0.40895273597365867,
+        0.368011395457626
+      ],
+      "std": [
+        0.21716769319444088,
+        0.19427591916533118,
+        0.19169160576482103
+      ]
+    },
+    "train_transform": {
+      "random_crop": 600,
+      "padding": 4,
+      "padding_mode": "reflect",
+      "horizontal_flip": 0.5
+    },
+    "sampler": {
+      "type": "weighted_inverse_frequency",
+      "replacement": true,
+      "num_samples": "dataset_length"
+    },
+    "_config_path": "/home/jason/PyCIL/configs/datasets/aid.json"
+  },
+  "method_config": {
+    "_meta": {
+      "method": "PASS",
+      "reference": "PyCIL baseline",
+      "reference_commit": "f3509b8ca3f20660ce4aa13f19d5283de81b4b35"
+    },
+    "model_name": "pass",
+    "epochs": 100,
+    "lr": 0.001,
+    "weight_decay": 0.0002,
+    "step_size": 45,
+    "gamma": 0.1,
+    "lambda_fkd": 10.0,
+    "lambda_proto": 10.0,
+    "temp": 0.1,
+    "batch_size": 12,
+    "_config_path": "/home/jason/PyCIL/configs/methods/pass.json"
+  },
+  "resolved_paths": {
+    "dataset_root": "/home/jason/PyCIL/datasets/raw/AID",
+    "train_manifest": "/home/jason/PyCIL/splits/aid/seed_1993/train.csv",
+    "test_manifest": "/home/jason/PyCIL/splits/aid/seed_1993/test.csv",
+    "task_config": "/home/jason/PyCIL/splits/aid/seed_1993/T5_tasks.json"
+  }
+}

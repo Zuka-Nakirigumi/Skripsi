@@ -1,0 +1,87 @@
+{
+  "source_machine": "server",
+  "generated_at": "2026-11-09T12:38:14",
+  "note": "Presence and file size checked on source only; content/loadability not verified.",
+  "inventory": {
+    "model_checkpoints/method_state_0.pkl": {
+      "exists": true,
+      "size": 26278443
+    },
+    "model_checkpoints/method_state_1.pkl": {
+      "exists": true,
+      "size": 30483320
+    },
+    "model_checkpoints/method_state_2.pkl": {
+      "exists": true,
+      "size": 34688194
+    },
+    "model_checkpoints/method_state_3.pkl": {
+      "exists": true,
+      "size": 38893066
+    },
+    "model_checkpoints/method_state_4.pkl": {
+      "exists": true,
+      "size": 43097942
+    },
+    "model_checkpoints/method_state_5.pkl": {
+      "exists": true,
+      "size": 47302814
+    },
+    "model_checkpoints/method_state_6.pkl": {
+      "exists": true,
+      "size": 51507690
+    },
+    "model_checkpoints/method_state_7.pkl": {
+      "exists": true,
+      "size": 55712564
+    },
+    "model_checkpoints/method_state_8.pkl": {
+      "exists": true,
+      "size": 59917447
+    },
+    "model_checkpoints/method_state_9.pkl": {
+      "exists": true,
+      "size": 64122328
+    },
+    "model_checkpoints/model_0.pkl": {
+      "exists": true,
+      "size": 86001024
+    },
+    "model_checkpoints/model_1.pkl": {
+      "exists": true,
+      "size": 86005374
+    },
+    "model_checkpoints/model_2.pkl": {
+      "exists": true,
+      "size": 86009788
+    },
+    "model_checkpoints/model_3.pkl": {
+      "exists": true,
+      "size": 86014202
+    },
+    "model_checkpoints/model_4.pkl": {
+      "exists": true,
+      "size": 86018552
+    },
+    "model_checkpoints/model_5.pkl": {
+      "exists": true,
+      "size": 86022966
+    },
+    "model_checkpoints/model_6.pkl": {
+      "exists": true,
+      "size": 86027316
+    },
+    "model_checkpoints/model_7.pkl": {
+      "exists": true,
+      "size": 86031730
+    },
+    "model_checkpoints/model_8.pkl": {
+      "exists": true,
+      "size": 86036144
+    },
+    "model_checkpoints/model_9.pkl": {
+      "exists": true,
+      "size": 86040494
+    }
+  }
+}
